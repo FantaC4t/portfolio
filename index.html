@@ -39,7 +39,7 @@
         <p class="hero-sub">i write code, break things, fix them, and occasionally stream it all. i run the tech behind tsnsmp and build whatever sounds fun.</p>
         <div class="hero-status" id="hero-status">
           <span class="hero-status-dot"></span>
-          <span id="hero-status-text">currently tinkering with: PlayerStatusReal</span>
+          <span id="hero-status-text">currently tinkering with: Fanta's Smart Placeholders</span>
         </div>
 
         <!-- Discord status + Tel Aviv clock -->
@@ -109,22 +109,40 @@
         <h3>TSNSMP</h3>
         <p class="game-desc">my minecraft server — i handle everything from the infrastructure to the mods to the website. it's a lot but i like it.</p>
         <div class="tags"><span class="tag">Minecraft</span><span class="tag">Java</span><span class="tag">Server Admin</span></div>
-        <span class="project-link">tsnsmp.online ↗</span>
+        <a class="project-link" href="https://www.tsnsmp.online" target="_blank" rel="noopener">tsnsmp.online ↗</a>
       </div>
     </div>
 
-    <!-- PlayerStatusReal game card -->
+    <!-- Fanta's Smart Placeholders game card -->
     <div class="cell cell-psr game-card">
+      <a href="https://modrinth.com/mod/fantas-smart-placholders" target="_blank" rel="noopener" class="card-full-link" aria-label="View Fanta's Smart Placeholders on Modrinth"></a>
       <div class="game-cover">
         <div class="cover-bg" style="background: radial-gradient(ellipse at 60% 35%, #0a1530 0%, #060c1c 45%, #020408 100%);"></div>
-        <div class="cover-icon" style="color:#6fa8ff">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <div class="modrinth-preview-card" id="psr-preview">
+          <div class="mrp-header">
+            <img class="mrp-icon" id="psr-icon" src="" alt="" />
+            <div class="mrp-meta">
+              <span class="mrp-title">Fanta's Smart Placeholders</span>
+              <span class="mrp-author">by fantac4t</span>
+            </div>
+            <img class="mrp-logo" src="https://cdn.modrinth.com/landing-new/modrinth-text-logo-dark.svg" alt="Modrinth" />
+          </div>
+          <p class="mrp-desc" id="psr-mrp-desc">Loading…</p>
+          <div class="mrp-stats">
+            <span class="mrp-stat" id="psr-mrp-downloads">⬇ —</span>
+            <span class="mrp-stat" id="psr-mrp-version">◈ —</span>
+            <span class="mrp-stat mrp-tag">Fabric</span>
+          </div>
         </div>
       </div>
       <div class="game-info">
-        <h3>PlayerStatusReal <span class="version-badge" id="psr-version"></span></h3>
-        <p class="game-desc">a fabric mod i made so you can see custom placeholders and j right in-game. works on 1.21.8.</p>
-        <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">1.21.8</span></div>
+        <h3>Fanta's Smart Placeholders <span class="version-badge" id="psr-version"></span></h3>
+        <p class="game-desc">a server-side fabric mod adding live status, custom name colors, roles, no-sleep toggling, and voice chat indicators via Placeholder API.</p>
+        <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">Server-side</span><span class="tag">1.21.11</span></div>
+        <div class="badges-row">
+          <span class="modrinth-badge" id="psr-downloads"></span>
+        </div>
+        <a class="project-link" href="https://modrinth.com/mod/fantas-smart-placholders" target="_blank" rel="noopener">modrinth ↗</a>
       </div>
     </div>
 
@@ -142,7 +160,7 @@
         <h3>Imposter Game</h3>
         <p class="game-desc">a multiplayer party game i built in hebrew, kind of like among us. uses firebase so everything syncs in real-time.</p>
         <div class="tags"><span class="tag">JavaScript</span><span class="tag">Firebase</span><span class="tag">SQL</span></div>
-        <span class="project-link">imposter.fantacat.net ↗</span>
+        <a class="project-link" href="https://imposter.fantacat.net" target="_blank" rel="noopener">imposter.fantacat.net ↗</a>
       </div>
     </div>
 
@@ -404,21 +422,5 @@
     })();
   </script>
 
-  <script>
-    // PSR version badge — hardcoded until repo goes public.
-    // When public, swap the two lines below to fetch from GitHub releases API.
-    (function () {
-      const el = document.getElementById('psr-version');
-      if (!el) return;
-      el.textContent = 'v1.4';
-      el.style.display = 'inline';
-
-      // Ready to go live — uncomment when repo is public:
-      // fetch('https://api.github.com/repos/fantac4t/playerstatusreal/releases/latest')
-      //   .then(r => r.ok ? r.json() : Promise.reject())
-      //   .then(d => { if (d.tag_name) { el.textContent = d.tag_name; el.style.display = 'inline'; } })
-      //   .catch(() => { el.textContent = 'v1.4'; el.style.display = 'inline'; });
-    })();
-  </script>
 </body>
 </html>

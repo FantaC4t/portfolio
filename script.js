@@ -236,19 +236,49 @@ if (window.matchMedia('(pointer: fine)').matches) {
   }, 1000);
 })();
 
-// ── PSR version badge ────────────────────────────────────────────
+// ── Fanta's Smart Placeholders badges (Modrinth) ─────────────────
 (function () {
-  const badge = document.getElementById('psr-version');
-  if (!badge) return;
-  fetch('https://api.github.com/repos/fantac4t/PlayerStatusReal/releases/latest')
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(({ tag_name }) => {
-      if (tag_name) {
-        badge.textContent   = tag_name;
-        badge.style.display = 'inline-flex';
-      }
-    })
-    .catch(() => {});
+  const versionBadge   = document.getElementById('psr-version');
+  const downloadsBadge = document.getElementById('psr-downloads');
+  if (!versionBadge && !downloadsBadge) return;
+
+  const slug = 'fantas-smart-placholders';
+
+  Promise.all([
+    fetch(`https://api.modrinth.com/v2/project/${slug}`).then(r => r.ok ? r.json() : Promise.reject()),
+    fetch(`https://api.modrinth.com/v2/project/${slug}/version`).then(r => r.ok ? r.json() : Promise.reject()),
+  ]).then(([project, versions]) => {
+    const fmtCount = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
+
+    if (versionBadge && versions.length) {
+      versionBadge.textContent   = 'v' + versions[0].version_number;
+      versionBadge.style.display = 'inline-flex';
+    }
+    if (downloadsBadge && project.downloads != null) {
+      downloadsBadge.textContent   = '⬇ ' + fmtCount(project.downloads) + ' downloads';
+      downloadsBadge.style.display = 'inline-flex';
+    }
+
+    // populate preview card
+    const icon = document.getElementById('psr-icon');
+    if (icon && project.icon_url) { icon.src = project.icon_url; icon.alt = project.title; }
+
+    const desc = document.getElementById('psr-mrp-desc');
+    if (desc && project.description) desc.textContent = project.description;
+
+    const dlStat = document.getElementById('psr-mrp-downloads');
+    if (dlStat && project.downloads != null) dlStat.textContent = '⬇ ' + fmtCount(project.downloads);
+
+    const verStat = document.getElementById('psr-mrp-version');
+    if (verStat && versions.length) verStat.textContent = '◈ ' + versions[0].version_number;
+  }).catch(() => {
+    // Modrinth not yet live — show hardcoded fallback
+    if (versionBadge) { versionBadge.textContent = 'v1.5'; versionBadge.style.display = 'inline-flex'; }
+    const verStat = document.getElementById('psr-mrp-version');
+    if (verStat) verStat.textContent = '◈ 1.5';
+    const desc = document.getElementById('psr-mrp-desc');
+    if (desc) desc.textContent = 'A server-side Fabric mod adding live status, custom name colors, roles, no-sleep toggling, and voice chat indicators via Placeholder API.';
+  });
 })();
 
 // ── Click-to-copy email ──────────────────────────────────────────

@@ -572,11 +572,11 @@ body.streaming .live-dot { display: inline-block; }
   transform: scale(1.08);
 }
 
-/* Full-card clickable link overlay (sits above cover, below game-info) */
+/* Full-card clickable link overlay (sits above game-info) */
 .card-full-link {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 4;
   border-radius: inherit;
   cursor: pointer;
 }
@@ -707,9 +707,12 @@ body.streaming .live-dot { display: inline-block; }
 }
 
 .project-link {
+  position: relative;
+  z-index: 5;
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--orange);
+  text-decoration: none;
   white-space: nowrap;
   transition: color var(--transition), letter-spacing var(--transition);
   display: inline-block;
@@ -1197,6 +1200,116 @@ body.streaming .live-dot { display: inline-block; }
   color: #7ab8ff;
   vertical-align: middle;
   margin-left: 0.38rem;
+  letter-spacing: 0.01em;
+}
+
+.badges-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+
+.modrinth-preview-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem 0.9rem;
+  background: linear-gradient(160deg, #1a2535 0%, #0f1924 60%, #0a1218 100%);
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.mrp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mrp-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+}
+
+.mrp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.mrp-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e8f0fe;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mrp-author {
+  font-size: 0.65rem;
+  color: #6b8ab0;
+}
+
+.mrp-logo {
+  height: 0.9rem;
+  opacity: 0.45;
+  flex-shrink: 0;
+  filter: invert(1);
+}
+
+.mrp-desc {
+  font-size: 0.68rem;
+  color: #8ba8c8;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.mrp-stats {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.mrp-stat {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  background: rgba(27,217,106,0.08);
+  border: 1px solid rgba(27,217,106,0.2);
+  color: #1bd96a;
+}
+
+.mrp-tag {
+  background: rgba(111,168,255,0.08);
+  border-color: rgba(111,168,255,0.2);
+  color: #6fa8ff;
+}
+
+.modrinth-badge {
+  display: none;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.13rem 0.46rem;
+  border-radius: 100px;
+  background: rgba(27,217,106,0.1);
+  border: 1px solid rgba(27,217,106,0.3);
+  color: #1bd96a;
   letter-spacing: 0.01em;
 }
 
