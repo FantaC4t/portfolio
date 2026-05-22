@@ -102,11 +102,8 @@ if (window.matchMedia('(pointer: fine)').matches) {
   setInterval(tick, 15000);
 })();
 
-// ── Lanyard: Discord status + YouTube Music Now Playing ──────────
+// ── Lanyard: Discord status + custom status + YouTube Music ──────
 (function () {
-  // Replace with your Discord user ID.
-  // Enable Developer Mode in Discord (Settings → Advanced), then
-  // right-click your avatar → "Copy User ID".
   const DISCORD_USER_ID = '325934332290007042';
 
   const STATUS_COLORS = {
@@ -115,67 +112,113 @@ if (window.matchMedia('(pointer: fine)').matches) {
     dnd:     { bg: '#f87171', glow: 'rgba(248,113,113,0.7)' },
     offline: { bg: '#6b7280', glow: 'rgba(107,114,128,0.4)' },
   };
-  const STATUS_LABELS = {
-    online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline',
-  };
 
-  async function fetchLanyard() {
-    try {
-      const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
-      if (!res.ok) return;
-      const { data } = await res.json();
+  // Capture static fallback once so we can restore it when VS Code closes
+  const _statusEl       = document.getElementById('hero-status-text');
+  const _statusFallback = _statusEl ? _statusEl.textContent : '';
 
-      // Discord status dot
-      const dot   = document.getElementById('discord-status-dot');
-      const label = document.getElementById('discord-status-text');
-      if (dot && label) {
-        const s = data.discord_status || 'offline';
-        const c = STATUS_COLORS[s] || STATUS_COLORS.offline;
-        dot.style.background = c.bg;
-        dot.style.boxShadow  = `0 0 6px ${c.glow}`;
-        // keep label as @fantacat — dot color communicates status
+  function applyPresence(data) {
+    // ── Discord status dot + custom status text ──────────────────
+    const dot   = document.getElementById('discord-status-dot');
+    const label = document.getElementById('discord-status-text');
+    if (dot && label) {
+      const s = data.discord_status || 'offline';
+      const c = STATUS_COLORS[s] || STATUS_COLORS.offline;
+      dot.style.background = c.bg;
+      dot.style.boxShadow  = `0 0 6px ${c.glow}`;
+
+      // Activity type 4 = Discord custom status
+      const customAct = (data.activities || []).find(a => a.type === 4);
+      if (customAct && (customAct.state || customAct.emoji?.name)) {
+        const emoji = customAct.emoji?.name ? customAct.emoji.name + ' ' : '';
+        label.textContent = emoji + (customAct.state || '');
+      } else {
+        label.textContent = '@fantacat';
       }
+    }
 
-      // YouTube Music via Rich Presence (ytmdesktop / amuse / any YT Music RPC)
-      const ytAct = (data.activities || []).find(a =>
-        /youtube.?music|amuse/i.test(a.name || '') ||
-        (a.assets?.large_image || '').toLowerCase().includes('youtube')
-      );
+    // ── VS Code activity → "currently editing" status ────────────
+    const vsAct = (data.activities || []).find(a =>
+      /visual.?studio.?code|vscode/i.test(a.name || '')
+    );
+    if (_statusEl) {
+      if (vsAct && vsAct.details) {
+        _statusEl.textContent = vsAct.details.toLowerCase();
+      } else {
+        _statusEl.textContent = _statusFallback;
+      }
+    }
 
-      const npEl     = document.getElementById('now-playing');
-      const artEl    = document.getElementById('np-art');
-      const trackEl  = document.getElementById('np-track');
-      const artistEl = document.getElementById('np-artist');
+    // ── YouTube Music via Rich Presence ──────────────────────────
+    const ytAct = (data.activities || []).find(a =>
+      /youtube.?music|amuse/i.test(a.name || '') ||
+      (a.assets?.large_image || '').toLowerCase().includes('youtube')
+    );
 
-      if (npEl) {
-        if (ytAct && ytAct.details) {
-          if (trackEl) {
-            trackEl.textContent = ytAct.details || '';
-            trackEl.href = `https://music.youtube.com/search?q=${encodeURIComponent((ytAct.details || '') + ' ' + (ytAct.state || ''))}`;
-          }
-          if (artistEl) artistEl.textContent = ytAct.state || '';
-          window._npTimestamps = ytAct.timestamps || null;
-          if (artEl && ytAct.assets?.large_image) {
-            const img = ytAct.assets.large_image;
-            artEl.src = img.startsWith('mp:external/')
-              ? `https://media.discordapp.net/${img.replace('mp:', '')}`
-              : img.startsWith('https')
-                ? img
-                : `https://cdn.discordapp.com/app-assets/${ytAct.application_id}/${img}.png`;
-          }
-          npEl.classList.add('is-active');
-        } else {
-          npEl.classList.remove('is-active');
-          window._npTimestamps = null;
+    const npEl     = document.getElementById('now-playing');
+    const artEl    = document.getElementById('np-art');
+    const trackEl  = document.getElementById('np-track');
+    const artistEl = document.getElementById('np-artist');
+
+    if (npEl) {
+      if (ytAct && ytAct.details) {
+        if (trackEl) {
+          trackEl.textContent = ytAct.details || '';
+          trackEl.href = `https://music.youtube.com/search?q=${encodeURIComponent((ytAct.details || '') + ' ' + (ytAct.state || ''))}`;
         }
+        if (artistEl) artistEl.textContent = ytAct.state || '';
+        window._npTimestamps = ytAct.timestamps || null;
+        if (artEl && ytAct.assets?.large_image) {
+          const img = ytAct.assets.large_image;
+          artEl.src = img.startsWith('mp:external/')
+            ? `https://media.discordapp.net/${img.replace('mp:', '')}`
+            : img.startsWith('https')
+              ? img
+              : `https://cdn.discordapp.com/app-assets/${ytAct.application_id}/${img}.png`;
+        }
+        npEl.classList.add('is-active');
+      } else {
+        npEl.classList.remove('is-active');
+        window._npTimestamps = null;
       }
-    } catch (_) {}
+    }
   }
 
-  fetchLanyard();
-  setInterval(fetchLanyard, 15000);
+  // ── Lanyard WebSocket (real-time, auto-reconnect) ─────────────
+  let hbTimer = null;
 
-  // Update progress bar + elapsed time every second
+  function connect() {
+    const ws = new WebSocket('wss://api.lanyard.rest/socket');
+
+    ws.addEventListener('message', e => {
+      const msg = JSON.parse(e.data);
+
+      if (msg.op === 1) {
+        // HELLO — start heartbeat + subscribe
+        clearInterval(hbTimer);
+        hbTimer = setInterval(() => {
+          if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ op: 3 }));
+        }, msg.d.heartbeat_interval);
+        ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_USER_ID } }));
+      }
+
+      if (msg.op === 0) {
+        // INIT_STATE or PRESENCE_UPDATE
+        applyPresence(msg.d);
+      }
+    });
+
+    ws.addEventListener('close', () => {
+      clearInterval(hbTimer);
+      setTimeout(connect, 3000);
+    });
+
+    ws.addEventListener('error', () => ws.close());
+  }
+
+  connect();
+
+  // ── Progress bar + elapsed time for Now Playing ───────────────
   setInterval(() => {
     const ts      = window._npTimestamps;
     const barFill = document.getElementById('np-bar-fill');

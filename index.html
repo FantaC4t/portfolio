@@ -15,6 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:,">
+  <meta property="og:image" content="20231007_040528.png" />
+  <meta name="twitter:image" content="20231007_040528.png" />
 </head>
 <body>
 
@@ -264,9 +267,10 @@
   <div class="konami-toast" id="konami-toast">&#127881; KONAMI! Rainbow mode activated</div>
 
   <script src="cursor.js"></script>
+  <script src="favicon.js"></script>
 
   <script>
-    (function () {
+    if (_isDesktop) (function () {
       const bg           = document.getElementById('hero-stream-bg');
       const defaultTitle = document.title;
 
@@ -285,11 +289,13 @@
           bg.classList.add('is-live');
           document.body.classList.add('streaming');
           document.title = '● LIVE — fantacat';
+          window._faviconState?.('live');
         });
         embed.addEventListener(Twitch.Embed.OFFLINE, () => {
           bg.classList.remove('is-live');
           document.body.classList.remove('streaming');
           document.title = defaultTitle;
+          window._faviconState?.('default');
         });
       };
       document.head.appendChild(s);
@@ -302,7 +308,11 @@
       const textEl     = document.getElementById('hero-status-text');
       const dot        = document.querySelector('.hero-status-dot');
 
+      // Show shimmer while fetching
+      textEl.classList.add('shimmer');
+
       function setStatus(html, dotColor, dotGlow) {
+        textEl.classList.remove('shimmer');
         textEl.innerHTML = html;
         dot.style.background = dotColor;
         dot.style.boxShadow  = `0 0 7px ${dotGlow}`;
@@ -323,6 +333,7 @@
               `Primarily coding in <strong>${name}</strong> · ${time}`,
               '#f59e0b', 'rgba(245,158,11,0.8)'
             );
+            window._faviconState?.('coding');
             return true;
           })
           .catch(() => false);
@@ -354,7 +365,42 @@
 
       tryWakaTime()
         .then(ok => ok || tryGitHub())
-        .catch(() => tryGitHub().catch(() => {}));
+        .catch(() => tryGitHub().catch(() => {}))
+        .finally(() => textEl.classList.remove('shimmer'));
+    })();
+  </script>
+
+  <script>
+    // Copy email on click
+    (function () {
+      const btn = document.getElementById('copy-email-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        navigator.clipboard.writeText('vanushka060@gmail.com').then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'copied!';
+          btn.style.background = 'linear-gradient(135deg,#4ade80,#22c55e)';
+          btn.style.color = '#052e16';
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.style.background = '';
+            btn.style.color = '';
+          }, 1800);
+        }).catch(() => { window.location.href = 'mailto:vanushka060@gmail.com'; });
+      });
+    })();
+
+    // Scroll progress indicator (mobile only)
+    (function () {
+      if (window.matchMedia('(pointer: fine)').matches) return;
+      const bar = document.createElement('div');
+      bar.className = 'scroll-indicator';
+      document.body.prepend(bar);
+      window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }, { passive: true });
     })();
   </script>
 
