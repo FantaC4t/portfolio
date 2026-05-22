@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fantac4t — Developer, Creator &amp; Streamer</title>
+  <meta name="description" content="fantac4t — developer, creator & Twitch streamer. Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="fantac4t — Developer, Creator & Streamer" />
+  <meta property="og:description" content="Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="fantac4t — Developer, Creator & Streamer" />
+  <meta name="twitter:description" content="Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <canvas id="fluid-canvas"></canvas>
+  <canvas id="bg-canvas"></canvas>
+  <div class="rays">
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+  </div>
+
+  <main class="bento-grid">
+
+    <!-- HERO -->
+    <div class="cell cell-hero">
+      <div class="hero-stream-bg" id="hero-stream-bg">
+        <div id="hero-twitch-embed"></div>
+        <div class="hero-stream-overlay"></div>
+      </div>
+      <div class="hero-live-indicator" aria-label="Currently streaming live">
+        <span class="dot"></span>
+        LIVE
+      </div>
+      <div class="cell-hero-inner">
+        <img class="hero-avatar" src="20231007_040528.png" alt="fantac4t" />
+        <span class="hero-tag">Owner &amp; Technical Lead @ TSNSMP &nbsp;·&nbsp; Streamer</span>
+        <h1>fanta<span class="gradient-text">c4t</span></h1>
+        <p class="hero-sub">Developer, creator &amp; Twitch streamer. I build Minecraft mods, web apps, and run the tech behind TSNSMP. Nix enthusiast.</p>
+        <div class="hero-status" id="hero-status">
+          <span class="hero-status-dot"></span>
+          <span id="hero-status-text">Currently building: PlayerStatusReal</span>
+        </div>
+
+        <!-- Discord status + Tel Aviv clock -->
+        <div class="hero-meta-row">
+          <div class="hero-discord-row" id="hero-discord">
+            <span class="discord-dot" id="discord-status-dot"></span>
+            <span id="discord-status-text">Discord</span>
+          </div>
+          <span class="meta-sep">&middot;</span>
+          <div class="hero-clock">
+            <span class="clock-city">Tel Aviv</span>
+            <span class="clock-sep">&middot;</span>
+            <span id="clock-time">--:--</span>
+          </div>
+        </div>
+
+        <!-- Music + contribution heatmap row -->
+        <div class="hero-music-contrib">
+          <!-- YouTube Music Now Playing (via Lanyard, shown when active) -->
+          <div class="hero-now-playing" id="now-playing">
+            <img class="np-art" id="np-art" src="" alt="" />
+            <div class="np-text">
+              <span class="np-label">&#9654; Now Playing</span>
+              <a class="np-track" id="np-track" href="#" target="_blank" rel="noopener noreferrer"></a>
+              <span class="np-artist" id="np-artist"></span>
+              <div class="np-progress-row">
+                <div class="np-bar-track"><div class="np-bar-fill" id="np-bar-fill"></div></div>
+                <span class="np-time" id="np-time"></span>
+              </div>
+            </div>
+          </div>
+          <!-- Inline GitHub contribution heatmap -->
+          <div class="hero-contrib" id="hero-contrib">
+            <div class="contrib-heatmap" id="contrib-heatmap"></div>
+            <span class="contrib-count" id="contrib-count"></span>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="btn btn-primary">
+            <span class="live-dot"></span>
+            Watch Live
+          </a>
+          <a href="mailto:vanushka060@gmail.com" class="btn btn-outline">Get in Touch</a>
+        </div>
+
+        <div class="hero-socials">
+          <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="social-btn" style="--sc:#9146ff" title="Twitch">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43z"/></svg>
+          </a>
+          <a href="https://github.com/fantac4t" target="_blank" rel="noopener" class="social-btn" style="--sc:#e0e0e0" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="https://discord.gg/B4pKwswkVE" target="_blank" rel="noopener" class="social-btn" style="--sc:#5865f2" title="Discord">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+          </a>
+          <a href="https://bsky.app/profile/fantacat.net" target="_blank" rel="noopener" class="social-btn" style="--sc:#0085ff" title="Bluesky">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 01-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.204-.659-.299-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8z"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TSNSMP game card — whole card links to site -->
+    <div class="cell cell-tsnsmp game-card">
+      <a href="https://www.tsnsmp.online" target="_blank" rel="noopener" class="card-full-link" aria-label="Visit TSNSMP"></a>
+      <div class="game-cover">
+        <div class="cover-bg" style="background: radial-gradient(ellipse at 35% 45%, #3d1800 0%, #1c0900 45%, #0a0300 100%);"></div>
+        <div class="iframe-wrap">
+          <iframe src="https://www.tsnsmp.online" scrolling="no" tabindex="-1" loading="lazy" title="TSNSMP preview"></iframe>
+        </div>
+        <div class="cover-overlay"></div>
+      </div>
+      <div class="game-info">
+        <div class="cell-role">Owner &amp; Technical Lead</div>
+        <h3>TSNSMP</h3>
+        <p class="game-desc">Community Minecraft SMP — I own the server and lead all technical operations: infrastructure, mods, plugins, and the website.</p>
+        <div class="tags"><span class="tag">Minecraft</span><span class="tag">Java</span><span class="tag">Server Admin</span></div>
+        <span class="project-link">tsnsmp.online ↗</span>
+      </div>
+    </div>
+
+    <!-- PlayerStatusReal game card -->
+    <div class="cell cell-psr game-card">
+      <div class="game-cover">
+        <div class="cover-bg" style="background: radial-gradient(ellipse at 60% 35%, #0a1530 0%, #060c1c 45%, #020408 100%);"></div>
+        <div class="cover-icon" style="color:#6fa8ff">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+      </div>
+      <div class="game-info">
+        <h3>PlayerStatusReal <span class="version-badge" id="psr-version"></span></h3>
+        <p class="game-desc">Minecraft Fabric mod displaying real-time player status in-game. Built for MC 1.21.8 with full Fabric API integration.</p>
+        <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">1.21.8</span></div>
+      </div>
+    </div>
+
+    <!-- Imposter Game card -->
+    <div class="cell cell-imposter game-card">
+      <a href="https://imposter.fantacat.net" target="_blank" rel="noopener" class="card-full-link" aria-label="Visit Imposter Game"></a>
+      <div class="game-cover">
+        <div class="cover-bg" style="background: radial-gradient(ellipse at 50% 40%, #2d0508 0%, #140204 45%, #080103 100%);"></div>
+        <div class="iframe-wrap">
+          <iframe src="https://imposter.fantacat.net" scrolling="no" tabindex="-1" loading="lazy" title="Imposter Game preview"></iframe>
+        </div>
+        <div class="cover-overlay"></div>
+      </div>
+      <div class="game-info">
+        <h3>Imposter Game</h3>
+        <p class="game-desc">Hebrew multiplayer party game inspired by Among Us. Real-time sync via Firebase and Cloudflare Workers backend.</p>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">Firebase</span><span class="tag">SQL</span></div>
+        <span class="project-link">imposter.fantacat.net ↗</span>
+      </div>
+    </div>
+
+    <!-- Stream Overlays game card -->
+    <div class="cell cell-overlays game-card">
+      <div class="game-cover">
+        <div class="cover-bg" style="background: radial-gradient(ellipse at 40% 35%, #201000 0%, #0e0800 45%, #050300 100%);"></div>
+        <div class="cover-icon" style="color:#ffe066">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+      <div class="game-info">
+        <h3>Stream Overlays</h3>
+        <p class="game-desc">Custom animated OBS browser-source overlays — starting soon, BRB, ending screen &amp; gameplay HUD.</p>
+        <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">OBS</span></div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="cell cell-skills">
+      <div class="skills-label">Skills</div>
+      <div class="skill-chips">
+        <span class="chip" style="--c:#ffaa6b">Java</span>
+        <span class="chip" style="--c:#ff85b3">JavaScript</span>
+        <span class="chip" style="--c:#ffe066">Python</span>
+        <span class="chip" style="--c:#5ccfcf">SQL</span>
+        <span class="chip" style="--c:#a78bfa">C#</span>
+        <span class="chip" style="--c:#ff8c69">HTML &amp; CSS</span>
+        <span class="chip" style="--c:#ffaa6b">Fabric API</span>
+        <span class="chip" style="--c:#ff85b3">Firebase</span>
+        <span class="chip" style="--c:#ffe066">Cloudflare Workers</span>
+        <span class="chip" style="--c:#5ccfcf">Unity</span>
+        <span class="chip" style="--c:#a78bfa">Git</span>
+        <span class="chip" style="--c:#ff8c69">Gradle</span>
+        <span class="chip" style="--c:#7ebae4">Nix</span>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="cell cell-contact">
+      <h3>Get in Touch</h3>
+      <p>Have a project, collab idea, or just want to say hi?</p>
+      <div class="contact-links">
+        <a href="mailto:vanushka060@gmail.com" id="copy-email-btn" class="btn btn-primary">Send Email</a>
+        <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="btn btn-outline">Watch on Twitch</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Stub elements fluid.js references — kept hidden -->
+  <div class="promo" style="display:none">
+    <div class="promo-close"></div>
+    <a id="apple_link"></a>
+    <a id="google_link"></a>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="background.js"></script>
+
+  <script>
+    function ga() {}
+
+    window.dat = { GUI: class {
+      constructor() {
+        this.__li = document.createElement('li');
+        this.domElement = { parentElement: document.createElement('div') };
+      }
+      add()            { return new this.constructor(); }
+      addFolder()      { return new this.constructor(); }
+      addColor()       { return new this.constructor(); }
+      name()           { return this; }
+      listen()         { return this; }
+      step()           { return this; }
+      onFinishChange() { return this; }
+      close()          {}
+    }};
+
+  </script>
+  <script src="fluid.js"></script>
+  <script>
+    // Transparent background so waves/page bg show through
+    config.COLORFUL             = false;
+    config.TRANSPARENT          = true;
+    config.BLOOM                = false;
+    config.DENSITY_DISSIPATION  = 3.5;
+    config.SUNRAYS              = false;
+    window.drawCheckerboard = () => {};
+
+    // Wipe the initial burst that fluid.js fires during its own init
+    initFramebuffers();
+
+    // Idle auto-splats (only after the canvas starts clean)
+    setInterval(() => splatStack.push(1), 2500);
+
+    // Call splat() directly — bypasses pointer state entirely.
+    let _fpx = -1, _fpy = -1;
+    window.addEventListener('mousemove', e => {
+      if (_fpx < 0) { _fpx = e.clientX; _fpy = e.clientY; return; }
+      const dx = e.clientX - _fpx, dy = e.clientY - _fpy;
+      if (Math.abs(dx) + Math.abs(dy) < 1) return;
+      const color = generateColor();
+      color.r *= 3; color.g *= 3; color.b *= 3;
+      splat(
+        e.clientX / window.innerWidth,
+        1.0 - e.clientY / window.innerHeight,
+        dx / window.innerWidth  * config.SPLAT_FORCE,
+       -dy / window.innerHeight * config.SPLAT_FORCE,
+        color
+      );
+      _fpx = e.clientX; _fpy = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => { _fpx = -1; _fpy = -1; });
+  </script>
+  <script src="dots.js"></script>
+  <!-- Konami toast notification -->
+  <div class="konami-toast" id="konami-toast">&#127881; KONAMI! Rainbow mode activated</div>
+
+  <script src="cursor.js"></script>
+
+  <script>
+    (function () {
+      const bg           = document.getElementById('hero-stream-bg');
+      const defaultTitle = document.title;
+
+      const s = document.createElement('script');
+      s.src = 'https://embed.twitch.tv/embed/v1.js';
+      s.onload = function () {
+        const embed = new Twitch.Embed('hero-twitch-embed', {
+          channel:  'fantac4t',
+          layout:   'video',
+          autoplay: true,
+          muted:    true,
+          width:    '100%',
+          height:   '100%',
+        });
+        embed.addEventListener(Twitch.Embed.ONLINE, () => {
+          bg.classList.add('is-live');
+          document.body.classList.add('streaming');
+          document.title = '● LIVE — fantac4t';
+        });
+        embed.addEventListener(Twitch.Embed.OFFLINE, () => {
+          bg.classList.remove('is-live');
+          document.body.classList.remove('streaming');
+          document.title = defaultTitle;
+        });
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const WAKA_SHARE = 'https://wakatime.com/share/@e5607946-deed-4d4e-9264-3a7cb7eb2a42/b39c6bca-d9ed-4ec7-8e0a-924a708ce7e8.json';
+      const textEl     = document.getElementById('hero-status-text');
+      const dot        = document.querySelector('.hero-status-dot');
+
+      function setStatus(html, dotColor, dotGlow) {
+        textEl.innerHTML = html;
+        dot.style.background = dotColor;
+        dot.style.boxShadow  = `0 0 7px ${dotGlow}`;
+      }
+
+      function tryWakaTime() {
+        return fetch(WAKA_SHARE)
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(({ data }) => {
+            if (!data?.length) return false;
+
+            const top = data[0];
+            const name = top.name;
+            const time = top.text;
+            if (!name || !time || name === 'Other') return false;
+
+            setStatus(
+              `Primarily coding in <strong>${name}</strong> · ${time}`,
+              '#f59e0b', 'rgba(245,158,11,0.8)'
+            );
+            return true;
+          })
+          .catch(() => false);
+      }
+
+      function tryGitHub() {
+        return fetch('https://api.github.com/users/fantac4t/events?per_page=15')
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(events => {
+            const push = events.find(e => e.type === 'PushEvent');
+            if (!push) return false;
+
+            const repo    = push.repo.name.replace('fantac4t/', '');
+            const message = push.payload.commits?.at(-1)?.message?.split('\n')[0] ?? '';
+            const short   = message.length > 48 ? message.slice(0, 48) + '…' : message;
+            const diffH   = Math.round((Date.now() - new Date(push.created_at)) / 3600000);
+            const when    = diffH < 1  ? 'just now'
+                          : diffH < 24 ? `${diffH}h ago`
+                          : `${Math.round(diffH / 24)}d ago`;
+
+            const msg = short ? ` — "${short}"` : '';
+            setStatus(
+              `Pushed to <a href="https://github.com/fantac4t/${repo}" target="_blank" rel="noopener" class="status-link">${repo}</a>${msg} · ${when}`,
+              '#60a5fa', 'rgba(96,165,250,0.8)'
+            );
+            return true;
+          });
+      }
+
+      tryWakaTime()
+        .then(ok => ok || tryGitHub())
+        .catch(() => tryGitHub().catch(() => {}));
+    })();
+  </script>
+</body>
+</html>
