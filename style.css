@@ -814,6 +814,18 @@ body.streaming .live-dot { display: inline-block; }
 @media (max-width: 900px), (max-height: 560px) {
   html, body { overflow: auto; height: auto; }
 
+  /* Reduce backdrop-filter cost — biggest mobile GPU win */
+  .cell {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Disable light rays — pure CSS animation overhead */
+  .rays { display: none; }
+
+  /* Disable entrance animations — reduces layout thrash on load */
+  .cell { animation: none; opacity: 1; }
+
   .bento-grid {
     height: auto;
     grid-template-columns: 1fr 1fr;

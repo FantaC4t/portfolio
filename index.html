@@ -205,58 +205,59 @@
   <script src="background.js"></script>
 
   <script>
-    function ga() {}
+    // Fluid sim is WebGL-heavy — skip entirely on touch/mobile devices
+    const _isDesktop = window.matchMedia('(pointer: fine)').matches && window.innerWidth > 900;
 
-    window.dat = { GUI: class {
-      constructor() {
-        this.__li = document.createElement('li');
-        this.domElement = { parentElement: document.createElement('div') };
-      }
-      add()            { return new this.constructor(); }
-      addFolder()      { return new this.constructor(); }
-      addColor()       { return new this.constructor(); }
-      name()           { return this; }
-      listen()         { return this; }
-      step()           { return this; }
-      onFinishChange() { return this; }
-      close()          {}
-    }};
+    if (_isDesktop) {
+      function ga() {}
 
-  </script>
-  <script src="fluid.js"></script>
-  <script>
-    // Transparent background so waves/page bg show through
-    config.COLORFUL             = false;
-    config.TRANSPARENT          = true;
-    config.BLOOM                = false;
-    config.DENSITY_DISSIPATION  = 3.5;
-    config.SUNRAYS              = false;
-    window.drawCheckerboard = () => {};
+      window.dat = { GUI: class {
+        constructor() {
+          this.__li = document.createElement('li');
+          this.domElement = { parentElement: document.createElement('div') };
+        }
+        add()            { return new this.constructor(); }
+        addFolder()      { return new this.constructor(); }
+        addColor()       { return new this.constructor(); }
+        name()           { return this; }
+        listen()         { return this; }
+        step()           { return this; }
+        onFinishChange() { return this; }
+        close()          {}
+      }};
 
-    // Wipe the initial burst that fluid.js fires during its own init
-    initFramebuffers();
+      const _fluidScript = document.createElement('script');
+      _fluidScript.src = 'fluid.js';
+      _fluidScript.onload = function () {
+        config.COLORFUL             = false;
+        config.TRANSPARENT          = true;
+        config.BLOOM                = false;
+        config.DENSITY_DISSIPATION  = 3.5;
+        config.SUNRAYS              = false;
+        window.drawCheckerboard = () => {};
+        initFramebuffers();
+        setInterval(() => splatStack.push(1), 2500);
 
-    // Idle auto-splats (only after the canvas starts clean)
-    setInterval(() => splatStack.push(1), 2500);
-
-    // Call splat() directly — bypasses pointer state entirely.
-    let _fpx = -1, _fpy = -1;
-    window.addEventListener('mousemove', e => {
-      if (_fpx < 0) { _fpx = e.clientX; _fpy = e.clientY; return; }
-      const dx = e.clientX - _fpx, dy = e.clientY - _fpy;
-      if (Math.abs(dx) + Math.abs(dy) < 1) return;
-      const color = generateColor();
-      color.r *= 3; color.g *= 3; color.b *= 3;
-      splat(
-        e.clientX / window.innerWidth,
-        1.0 - e.clientY / window.innerHeight,
-        dx / window.innerWidth  * config.SPLAT_FORCE,
-       -dy / window.innerHeight * config.SPLAT_FORCE,
-        color
-      );
-      _fpx = e.clientX; _fpy = e.clientY;
-    });
-    document.addEventListener('mouseleave', () => { _fpx = -1; _fpy = -1; });
+        let _fpx = -1, _fpy = -1;
+        window.addEventListener('mousemove', e => {
+          if (_fpx < 0) { _fpx = e.clientX; _fpy = e.clientY; return; }
+          const dx = e.clientX - _fpx, dy = e.clientY - _fpy;
+          if (Math.abs(dx) + Math.abs(dy) < 1) return;
+          const color = generateColor();
+          color.r *= 3; color.g *= 3; color.b *= 3;
+          splat(
+            e.clientX / window.innerWidth,
+            1.0 - e.clientY / window.innerHeight,
+            dx / window.innerWidth  * config.SPLAT_FORCE,
+           -dy / window.innerHeight * config.SPLAT_FORCE,
+            color
+          );
+          _fpx = e.clientX; _fpy = e.clientY;
+        });
+        document.addEventListener('mouseleave', () => { _fpx = -1; _fpy = -1; });
+      };
+      document.body.appendChild(_fluidScript);
+    }
   </script>
   <script src="dots.js"></script>
   <!-- Konami toast notification -->
@@ -354,6 +355,23 @@
       tryWakaTime()
         .then(ok => ok || tryGitHub())
         .catch(() => tryGitHub().catch(() => {}));
+    })();
+  </script>
+
+  <script>
+    // PSR version badge — hardcoded until repo goes public.
+    // When public, swap the two lines below to fetch from GitHub releases API.
+    (function () {
+      const el = document.getElementById('psr-version');
+      if (!el) return;
+      el.textContent = 'v1.4';
+      el.style.display = 'inline';
+
+      // Ready to go live — uncomment when repo is public:
+      // fetch('https://api.github.com/repos/fantac4t/playerstatusreal/releases/latest')
+      //   .then(r => r.ok ? r.json() : Promise.reject())
+      //   .then(d => { if (d.tag_name) { el.textContent = d.tag_name; el.style.display = 'inline'; } })
+      //   .catch(() => { el.textContent = 'v1.4'; el.style.display = 'inline'; });
     })();
   </script>
 </body>

@@ -1,4 +1,5 @@
 (function () {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
   const SPACING = 28;
 
   document.querySelectorAll('.cell').forEach(cell => {
