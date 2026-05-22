@@ -13,7 +13,7 @@
   document.addEventListener('mousemove', e => {
     mx = e.clientX;
     my = e.clientY;
-    dot.style.transform = `translate(calc(${mx}px - 50%), calc(${my}px - 50%))`;
+    dot.style.transform = `translate3d(calc(${mx}px - 50%), calc(${my}px - 50%), 0)`;
   });
 
   document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
@@ -29,10 +29,14 @@
     el.addEventListener('mouseleave', () => setHover(false));
   });
 
-  (function loop() {
-    rx += (mx - rx) * 0.13;
-    ry += (my - ry) * 0.13;
-    ring.style.transform = `translate(calc(${rx}px - 50%), calc(${ry}px - 50%))`;
+  let last = performance.now();
+  (function loop(now) {
+    const dt     = Math.min((now - last) / 16.667, 4);
+    last         = now;
+    const factor = 1 - Math.pow(0.87, dt);
+    rx += (mx - rx) * factor;
+    ry += (my - ry) * factor;
+    ring.style.transform = `translate3d(calc(${rx}px - 50%), calc(${ry}px - 50%), 0)`;
     requestAnimationFrame(loop);
-  })();
+  })(performance.now());
 })();
