@@ -335,7 +335,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
   });
 }
 
-// ── Konami code easter egg ───────────────────────────────────────
+// ── Gradius cheat code easter egg ───────────────────────────────
 (function () {
   const SEQ = [
     'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
