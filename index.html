@@ -39,7 +39,7 @@
         <p class="hero-sub">i write code, break things, fix them, and occasionally stream it all. i run the tech behind tsnsmp and build whatever sounds fun.</p>
         <div class="hero-status" id="hero-status">
           <span class="hero-status-dot"></span>
-          <span id="hero-status-text">currently tinkering with: Fanta's Smart Placeholders</span>
+          <span id="hero-status-text">goofing around</span>
         </div>
 
         <!-- Discord status + Tel Aviv clock -->
@@ -364,7 +364,7 @@
             const push = events.find(e => e.type === 'PushEvent');
             if (!push) return false;
 
-            const repo    = push.repo.name.replace('fantac4t/', '');
+            const repo    = push.repo.name.replace(/^fantac4t\//i, '');
             const message = push.payload.commits?.at(-1)?.message?.split('\n')[0] ?? '';
             const short   = message.length > 48 ? message.slice(0, 48) + '…' : message;
             const diffH   = Math.round((Date.now() - new Date(push.created_at)) / 3600000);

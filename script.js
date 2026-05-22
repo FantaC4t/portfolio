@@ -353,7 +353,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
   });
 
   function triggerKonami() {
-    if (typeof config !== 'undefined') config.COLORFUL = true;
+    if (typeof window.triggerRainbow === 'function') window.triggerRainbow(7500);
 
     const toast = document.getElementById('konami-toast');
     if (toast) toast.classList.add('show');
@@ -369,7 +369,6 @@ if (window.matchMedia('(pointer: fine)').matches) {
     });
 
     setTimeout(() => {
-      if (typeof config !== 'undefined') config.COLORFUL = false;
       if (toast) toast.classList.remove('show');
       document.querySelectorAll('.cell').forEach(c =>
         c.classList.remove('konami-shake', 'konami-rainbow')

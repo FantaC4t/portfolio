@@ -1563,12 +1563,30 @@ function correctDeltaY (delta) {
 }
 
 function generateColor () {
-    let c = HSVtoRGB(0.061 + Math.random() * 0.022, 1.0, 1.0);
-    c.r *= 0.15;
-    c.g *= 0.15;
-    c.b *= 0.15;
+    const h = window._rainbowMode ? Math.random() : (0.061 + Math.random() * 0.022);
+    const brightness = window._rainbowMode ? 0.35 : 0.15;
+    let c = HSVtoRGB(h, 1.0, 1.0);
+    c.r *= brightness;
+    c.g *= brightness;
+    c.b *= brightness;
     return c;
 }
+
+window.triggerRainbow = function (duration) {
+    window._rainbowMode = true;
+    const savedRadius = config.SPLAT_RADIUS;
+    const savedForce  = config.SPLAT_FORCE;
+    config.SPLAT_RADIUS = 0.35;
+    config.SPLAT_FORCE  = 12000;
+    multipleSplats(30);
+    const burst = setInterval(() => multipleSplats(8), 350);
+    setTimeout(() => {
+        clearInterval(burst);
+        window._rainbowMode  = false;
+        config.SPLAT_RADIUS  = savedRadius;
+        config.SPLAT_FORCE   = savedForce;
+    }, duration);
+};
 
 function HSVtoRGB (h, s, v) {
     let r, g, b, i, f, p, q, t;
