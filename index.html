@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fantac4t — Developer, Creator &amp; Streamer</title>
-  <meta name="description" content="fantac4t — developer, creator & Twitch streamer. Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <title>fantacat</title>
+  <meta name="description" content="hey, i'm fantacat — i build stuff, run a minecraft server, and stream sometimes. welcome to my corner of the internet." />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="fantac4t — Developer, Creator & Streamer" />
-  <meta property="og:description" content="Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <meta property="og:title" content="fantacat" />
+  <meta property="og:description" content="i build stuff, run a minecraft server, and stream sometimes." />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="fantac4t — Developer, Creator & Streamer" />
-  <meta name="twitter:description" content="Owner & Technical Lead of TSNSMP. Builds Minecraft mods, web apps, and stream tooling." />
+  <meta name="twitter:title" content="fantacat" />
+  <meta name="twitter:description" content="i build stuff, run a minecraft server, and stream sometimes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -29,34 +29,24 @@
 
     <!-- HERO -->
     <div class="cell cell-hero">
-      <div class="hero-stream-bg" id="hero-stream-bg">
-        <div id="hero-twitch-embed"></div>
-        <div class="hero-stream-overlay"></div>
-      </div>
-      <div class="hero-live-indicator" aria-label="Currently streaming live">
-        <span class="dot"></span>
-        LIVE
-      </div>
       <div class="cell-hero-inner">
-        <img class="hero-avatar" src="20231007_040528.png" alt="fantac4t" />
-        <span class="hero-tag">Owner &amp; Technical Lead @ TSNSMP &nbsp;·&nbsp; Streamer</span>
-        <h1>fanta<span class="gradient-text">c4t</span></h1>
-        <p class="hero-sub">Developer, creator &amp; Twitch streamer. I build Minecraft mods, web apps, and run the tech behind TSNSMP. Nix enthusiast.</p>
+        <img class="hero-avatar" src="20231007_040528.png" alt="fantacat" />
+        <span class="hero-tag">i run tsnsmp &nbsp;·&nbsp; i make stuff &nbsp;·&nbsp; i stream sometimes</span>
+        <h1>fanta<span class="name-accent">cat</span><span class="typing-caret">|</span></h1>
+        <p class="hero-sub">i write code, break things, fix them, and occasionally stream it all. i run the tech behind tsnsmp and build whatever sounds fun.</p>
         <div class="hero-status" id="hero-status">
           <span class="hero-status-dot"></span>
-          <span id="hero-status-text">Currently building: PlayerStatusReal</span>
+          <span id="hero-status-text">currently tinkering with: PlayerStatusReal</span>
         </div>
 
         <!-- Discord status + Tel Aviv clock -->
         <div class="hero-meta-row">
           <div class="hero-discord-row" id="hero-discord">
             <span class="discord-dot" id="discord-status-dot"></span>
-            <span id="discord-status-text">Discord</span>
+            <span id="discord-status-text">@fantacat</span>
           </div>
           <span class="meta-sep">&middot;</span>
           <div class="hero-clock">
-            <span class="clock-city">Tel Aviv</span>
-            <span class="clock-sep">&middot;</span>
             <span id="clock-time">--:--</span>
           </div>
         </div>
@@ -81,14 +71,6 @@
             <div class="contrib-heatmap" id="contrib-heatmap"></div>
             <span class="contrib-count" id="contrib-count"></span>
           </div>
-        </div>
-
-        <div class="hero-cta">
-          <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="btn btn-primary">
-            <span class="live-dot"></span>
-            Watch Live
-          </a>
-          <a href="mailto:vanushka060@gmail.com" class="btn btn-outline">Get in Touch</a>
         </div>
 
         <div class="hero-socials">
@@ -120,9 +102,9 @@
         <div class="cover-overlay"></div>
       </div>
       <div class="game-info">
-        <div class="cell-role">Owner &amp; Technical Lead</div>
+        <div class="cell-role">i own and run this</div>
         <h3>TSNSMP</h3>
-        <p class="game-desc">Community Minecraft SMP — I own the server and lead all technical operations: infrastructure, mods, plugins, and the website.</p>
+        <p class="game-desc">my minecraft server — i handle everything from the infrastructure to the mods to the website. it's a lot but i like it.</p>
         <div class="tags"><span class="tag">Minecraft</span><span class="tag">Java</span><span class="tag">Server Admin</span></div>
         <span class="project-link">tsnsmp.online ↗</span>
       </div>
@@ -138,7 +120,7 @@
       </div>
       <div class="game-info">
         <h3>PlayerStatusReal <span class="version-badge" id="psr-version"></span></h3>
-        <p class="game-desc">Minecraft Fabric mod displaying real-time player status in-game. Built for MC 1.21.8 with full Fabric API integration.</p>
+        <p class="game-desc">a fabric mod i made so you can see custom placeholders and j right in-game. works on 1.21.8.</p>
         <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">1.21.8</span></div>
       </div>
     </div>
@@ -155,7 +137,7 @@
       </div>
       <div class="game-info">
         <h3>Imposter Game</h3>
-        <p class="game-desc">Hebrew multiplayer party game inspired by Among Us. Real-time sync via Firebase and Cloudflare Workers backend.</p>
+        <p class="game-desc">a multiplayer party game i built in hebrew, kind of like among us. uses firebase so everything syncs in real-time.</p>
         <div class="tags"><span class="tag">JavaScript</span><span class="tag">Firebase</span><span class="tag">SQL</span></div>
         <span class="project-link">imposter.fantacat.net ↗</span>
       </div>
@@ -171,7 +153,7 @@
       </div>
       <div class="game-info">
         <h3>Stream Overlays</h3>
-        <p class="game-desc">Custom animated OBS browser-source overlays — starting soon, BRB, ending screen &amp; gameplay HUD.</p>
+        <p class="game-desc">the animated overlays i use on stream — starting soon, brb screen, ending, and the gameplay hud. all hand-coded.</p>
         <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">OBS</span></div>
       </div>
     </div>
@@ -198,11 +180,15 @@
 
     <!-- Contact -->
     <div class="cell cell-contact">
-      <h3>Get in Touch</h3>
-      <p>Have a project, collab idea, or just want to say hi?</p>
+      <h3>say hi</h3>
+      <p>got something cool in mind, or just wanna chat? hit me up.</p>
       <div class="contact-links">
-        <a href="mailto:vanushka060@gmail.com" id="copy-email-btn" class="btn btn-primary">Send Email</a>
-        <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="btn btn-outline">Watch on Twitch</a>
+        <a href="mailto:vanushka060@gmail.com" id="copy-email-btn" class="btn btn-primary">send an email</a>
+        <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" class="btn btn-outline">watch on twitch</a>
+      </div>
+      <div class="contact-discord">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+        <span>@fantacat</span>
       </div>
     </div>
 
@@ -297,7 +283,7 @@
         embed.addEventListener(Twitch.Embed.ONLINE, () => {
           bg.classList.add('is-live');
           document.body.classList.add('streaming');
-          document.title = '● LIVE — fantac4t';
+          document.title = '● LIVE — fantacat';
         });
         embed.addEventListener(Twitch.Embed.OFFLINE, () => {
           bg.classList.remove('is-live');

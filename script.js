@@ -31,6 +31,61 @@ if (window.matchMedia('(pointer: fine)').matches) {
   });
 }
 
+// ── Hero h1 name cycling (typewriter, random interval) ───────────
+(function () {
+  const h1 = document.querySelector('.cell-hero h1');
+  if (!h1) return;
+
+  const NAMES = [
+    { plain: 'fanta', grad: 'cat' },
+    { plain: 'Ivan ',  grad: 'S.' },
+  ];
+  const TYPE_MS  = 85;   // ms per character typed
+  const ERASE_MS = 48;   // ms per character erased
+  const MIN_WAIT = 4000; // minimum pause before switching
+  const MAX_WAIT = 12000; // maximum pause before switching
+
+  let idx = 0;
+
+  function render(plain, grad) {
+    h1.innerHTML = plain + (grad ? `<span class="name-accent">${grad}</span>` : '') + '<span class="typing-caret">|</span>';
+  }
+
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  async function erase({ plain, grad }) {
+    for (let i = grad.length; i > 0; i--) {
+      render(plain, grad.slice(0, i - 1));
+      await wait(ERASE_MS);
+    }
+    for (let i = plain.length; i > 0; i--) {
+      render(plain.slice(0, i - 1), '');
+      await wait(ERASE_MS);
+    }
+  }
+
+  async function type({ plain, grad }) {
+    for (let i = 1; i <= plain.length; i++) {
+      render(plain.slice(0, i), '');
+      await wait(TYPE_MS);
+    }
+    for (let i = 1; i <= grad.length; i++) {
+      render(plain, grad.slice(0, i));
+      await wait(TYPE_MS);
+    }
+  }
+
+  (async function cycle() {
+    while (true) {
+      await wait(MIN_WAIT + Math.random() * (MAX_WAIT - MIN_WAIT));
+      await erase(NAMES[idx]);
+      await wait(180);
+      idx = (idx + 1) % NAMES.length;
+      await type(NAMES[idx]);
+    }
+  })();
+})();
+
 // ── Tel Aviv clock ──────────────────────────────────────────────
 (function () {
   const timeEl = document.getElementById('clock-time');
@@ -78,7 +133,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
         const c = STATUS_COLORS[s] || STATUS_COLORS.offline;
         dot.style.background = c.bg;
         dot.style.boxShadow  = `0 0 6px ${c.glow}`;
-        label.textContent    = STATUS_LABELS[s] || 'Offline';
+        // keep label as @fantacat — dot color communicates status
       }
 
       // YouTube Music via Rich Presence (ytmdesktop / amuse / any YT Music RPC)
@@ -175,6 +230,20 @@ if (window.matchMedia('(pointer: fine)').matches) {
       .catch(() => {
         window.location.href = 'mailto:vanushka060@gmail.com';
       });
+  });
+})();
+
+// ── Click-to-copy Discord username ───────────────────────────────
+(function () {
+  const chip = document.querySelector('.contact-discord');
+  if (!chip) return;
+  const label = chip.querySelector('span');
+  chip.addEventListener('click', () => {
+    navigator.clipboard.writeText('fantacat').then(() => {
+      label.textContent = 'copied ✓';
+      chip.style.color  = '#5865f2';
+      setTimeout(() => { label.textContent = '@fantacat'; chip.style.color = ''; }, 2000);
+    });
   });
 })();
 
