@@ -423,6 +423,45 @@ if (window.matchMedia('(pointer: fine)').matches) {
     });
 })();
 
+// ── WakaTime last-7-days language bars ───────────────────────────
+(function () {
+  const WAKA_LANGS = 'https://wakatime.com/share/@e5607946-deed-4d4e-9264-3a7cb7eb2a42/a7fb97a5-e023-47ed-9e02-7b196ddc16b9.json';
+  const container  = document.getElementById('waka-lang-bars');
+  const wrapEl     = document.getElementById('hero-waka');
+  if (!container) return;
+
+  fetch(WAKA_LANGS)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(({ data }) => {
+      if (!data?.length) throw new Error('empty');
+
+      // Cap at 5 languages; first entry always has the highest percent
+      const top5   = data.slice(0, 5);
+      const maxPct = top5[0].percent || 100;
+
+      container.innerHTML = top5.map(lang => `
+        <div class="waka-bar">
+          <span class="waka-bar-name">${lang.name}</span>
+          <div class="waka-bar-track">
+            <div class="waka-bar-fill" style="width:0%;--lang-color:${lang.color || 'var(--orange)'}"
+                 data-pct="${((lang.percent / maxPct) * 100).toFixed(1)}"></div>
+          </div>
+          <span class="waka-bar-time">${lang.percent.toFixed(1)}%</span>
+        </div>
+      `).join('');
+
+      // Animate bars in on next frame so CSS transition fires
+      requestAnimationFrame(() => {
+        container.querySelectorAll('.waka-bar-fill').forEach(fill => {
+          fill.style.width = fill.dataset.pct + '%';
+        });
+      });
+    })
+    .catch(() => {
+      if (wrapEl) wrapEl.style.display = 'none';
+    });
+})();
+
 // ── Scroll-linked parallax on mobile ─────────────────────────────
 (function () {
   if (window.matchMedia('(pointer: fine)').matches) return;
