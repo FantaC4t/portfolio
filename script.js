@@ -425,32 +425,59 @@ if (window.matchMedia('(pointer: fine)').matches) {
 
 // ── WakaTime last-7-days language bars ───────────────────────────
 (function () {
-  const WAKA_LANGS = 'https://wakatime.com/share/@e5607946-deed-4d4e-9264-3a7cb7eb2a42/a7fb97a5-e023-47ed-9e02-7b196ddc16b9.json';
-  const container  = document.getElementById('waka-lang-bars');
-  const wrapEl     = document.getElementById('hero-waka');
+  // Language % breakdown (name, percent, color)
+  const WAKA_LANGS    = 'https://wakatime.com/share/@e5607946-deed-4d4e-9264-3a7cb7eb2a42/a7fb97a5-e023-47ed-9e02-7b196ddc16b9.json';
+  // Daily coding activity (grand_total.total_seconds per day)
+  const WAKA_ACTIVITY = 'https://wakatime.com/share/@e5607946-deed-4d4e-9264-3a7cb7eb2a42/15e3ec86-7b4d-4ac5-bcc5-82165df62b1b.json';
+
+  const container = document.getElementById('waka-lang-bars');
+  const wrapEl    = document.getElementById('hero-waka');
   if (!container) return;
 
-  fetch(WAKA_LANGS)
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(({ data }) => {
-      if (!data?.length) throw new Error('empty');
+  Promise.all([
+    fetch(WAKA_LANGS).then(r => r.ok ? r.json() : Promise.reject()),
+    fetch(WAKA_ACTIVITY).then(r => r.ok ? r.json() : Promise.reject()),
+  ])
+    .then(([langs, activity]) => {
+      const langData = langs.data ?? [];
+      if (!langData.length) throw new Error('empty');
 
-      // Cap at 5 languages; first entry always has the highest percent
-      const top5   = data.slice(0, 5);
-      const maxPct = top5[0].percent || 100;
+      // Sum total coded seconds across all days in the activity share
+      const totalSecs = (activity.data ?? []).reduce(
+        (sum, day) => sum + (day.grand_total?.total_seconds ?? 0), 0
+      );
 
-      container.innerHTML = top5.map(lang => `
-        <div class="waka-bar">
+      // Filter noise and cap at 5 languages
+      const top5   = langData.filter(l => l.name && l.name !== 'Other').slice(0, 5);
+      const maxPct = top5[0]?.percent || 100;
+
+      function fmtTime(secs) {
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        if (h > 0) return `${h}h ${m}m`;
+        if (m > 0) return `${m}m`;
+        return '< 1m';
+      }
+
+      container.innerHTML = top5.map(lang => {
+        const langSecs = (lang.percent / 100) * totalSecs;
+        const timeText = totalSecs > 0 ? fmtTime(langSecs) : `${lang.percent.toFixed(1)}%`;
+
+        return `<div class="waka-bar">
           <span class="waka-bar-name">${lang.name}</span>
           <div class="waka-bar-track">
-            <div class="waka-bar-fill" style="width:0%;--lang-color:${lang.color || 'var(--orange)'}"
+            <div class="waka-bar-fill"
+                 style="width:0%;--lang-color:${lang.color || 'var(--orange)'}"
                  data-pct="${((lang.percent / maxPct) * 100).toFixed(1)}"></div>
           </div>
-          <span class="waka-bar-time">${lang.percent.toFixed(1)}%</span>
-        </div>
-      `).join('');
+          <span class="waka-bar-time">
+            ${timeText}
+            <span class="waka-bar-pct">${lang.percent.toFixed(1)}%</span>
+          </span>
+        </div>`;
+      }).join('');
 
-      // Animate bars in on next frame so CSS transition fires
+      // Animate bars in on next frame so the CSS transition fires
       requestAnimationFrame(() => {
         container.querySelectorAll('.waka-bar-fill').forEach(fill => {
           fill.style.width = fill.dataset.pct + '%';

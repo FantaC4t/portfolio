@@ -1266,7 +1266,7 @@ body.streaming .live-dot { display: inline-block; }
 
 .waka-bar {
   display: grid;
-  grid-template-columns: 68px 1fr 58px;
+  grid-template-columns: 68px 1fr auto;
   align-items: center;
   gap: 0.38rem;
 }
@@ -1312,12 +1312,24 @@ body.streaming .live-dot { display: inline-block; }
 }
 
 .waka-bar-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.05rem;
   font-size: 0.69rem;
-  font-weight: 500;
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.85;
   text-align: right;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+.waka-bar-pct {
+  font-size: 0.61rem;
+  font-weight: 500;
+  color: var(--muted);
+  opacity: 0.7;
 }
 
 /* Hide on very small screens where the hero is already tight */
