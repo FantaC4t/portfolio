@@ -448,7 +448,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
       );
 
       // Filter noise and cap at 5 languages
-      const top5   = langData.filter(l => l.name && l.name !== 'Other').slice(0, 5);
+      const top5   = langData.filter(l => l.name && l.name !== 'Other').slice(0, 4);
       const maxPct = top5[0]?.percent || 100;
 
       function fmtTime(secs) {
