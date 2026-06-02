@@ -15,14 +15,120 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Performance: early connection to every external origin the page uses -->
+  <link rel="preconnect" href="https://api.lanyard.rest" />
+  <link rel="preconnect" href="https://wakatime.com" />
+  <link rel="preconnect" href="https://api.github.com" />
+  <link rel="preconnect" href="https://api.modrinth.com" />
+  <link rel="preconnect" href="https://cdn.modrinth.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.discordapp.com" crossorigin />
+  <link rel="preconnect" href="https://github-contributions-api.jogruber.de" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:,">
+
+  <!-- ── Loading screen — inlined so it paints before style.css ── -->
+  <style>
+    #ld{position:fixed;inset:0;z-index:999999;background:#0d0905;overflow:hidden;transition:opacity .42s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.4,0,.2,1)}
+    /* overlay scales slightly out as it fades — feels like it "pops" away */
+    #ld.out{opacity:0;transform:scale(1.04);pointer-events:none}
+    #ld-cv{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+    #ld-plate{position:absolute;width:520px;height:280px;background:radial-gradient(ellipse,rgba(13,9,5,.85) 30%,transparent 72%);pointer-events:none;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%)}
+    #ld-inner{position:absolute;top:50%;left:50%;z-index:2;display:flex;flex-direction:column;align-items:center;gap:1.1rem;white-space:nowrap;
+              animation:ldIn .55s cubic-bezier(.22,1,.36,1) .06s both}
+    /* Fix: keyframes must carry the centering translate so fill-mode doesn't break it */
+    @keyframes ldIn {
+      from { opacity:0; transform:translate(-50%,calc(-50% + 24px)) scale(.97); }
+      to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+    }
+    #ld-name{font-family:'Space Grotesk',system-ui,sans-serif;font-size:clamp(2.8rem,7vw,5.2rem);font-weight:800;letter-spacing:-.03em;line-height:1;color:#fff5ee;margin:0;text-shadow:0 0 36px rgba(255,130,50,.7),0 0 80px rgba(255,90,20,.28)}
+    #ld-name span{background:linear-gradient(135deg,#ffaa6b,#ff8c69);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    #ld-cursor{display:inline-block;width:3px;height:.78em;background:#ffaa6b;border-radius:1px;vertical-align:-.1em;margin-left:2px;box-shadow:0 0 8px rgba(255,170,107,.7);animation:ldCursBlink .52s steps(1) infinite}
+    @keyframes ldCursBlink{50%{opacity:0}}
+    #ld-bar{width:88px;height:2px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+    #ld-bar-fill{height:100%;width:0;background:linear-gradient(90deg,#ffaa6b,#ff8c69);border-radius:99px;animation:ldFill .54s cubic-bezier(.4,0,.2,1) .08s forwards}
+    @keyframes ldFill{to{width:100%}}
+  </style>
   <meta property="og:image" content="https://fantacat.net/20231007_040528.png" />
   <meta name="twitter:image" content="https://fantacat.net/20231007_040528.png" />
 </head>
 <body>
 
+  <!-- fluid.js grabs canvas[0] — must come before #ld-cv -->
   <canvas id="fluid-canvas"></canvas>
+
+  <!-- Loading screen -->
+  <div id="ld" aria-hidden="true">
+    <canvas id="ld-cv"></canvas>
+    <div id="ld-plate"></div>
+    <div id="ld-inner">
+      <p id="ld-name">fanta<span>cat</span></p>
+      <div id="ld-bar"><div id="ld-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- Rain starts HERE — right after the canvas is in the DOM, before any other script -->
+  <script>
+    window._ldStop = function(){};
+    (function(){
+      var cv = document.getElementById('ld-cv');
+      if (!cv || !cv.getContext) return;
+      var ctx = cv.getContext('2d');
+
+      var W = cv.width  = window.innerWidth  || document.documentElement.clientWidth  || 800;
+      var H = cv.height = window.innerHeight || document.documentElement.clientHeight || 600;
+
+      var F  = 14;
+      var NC = Math.ceil(W / F) + 1;
+      var CH = 'ｦｧｨｩｪｫｬｭｮｯｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEFfantacat';
+      var CL = CH.length;
+
+      var col = new Int16Array(NC);
+      for (var i = 0; i < NC; i++) {
+        col[i] = Math.random() < 0.65
+          ? Math.floor(Math.random() * (H / F))
+          : -Math.floor(Math.random() * 20);
+      }
+
+      function rc() { return CH[Math.floor(Math.random() * CL)]; }
+
+      var tick = 0;
+      var rid;
+      function draw() {
+        tick++;
+        // Soft fade — longer trail (~14–16 visible chars at this speed)
+        ctx.fillStyle = 'rgba(13,9,5,0.082)';
+        ctx.fillRect(0, 0, W, H);
+        ctx.font = F + 'px monospace';
+
+        for (var i = 0; i < NC; i++) {
+          var py = col[i] * F;
+
+          // White-hot leading tip
+          ctx.fillStyle = 'rgba(255,252,242,0.97)';
+          ctx.fillText(rc(), i * F, py);
+
+          // Bright orange
+          ctx.fillStyle = 'rgba(255,168,70,0.86)';
+          ctx.fillText(rc(), i * F, py - F);
+
+          // Deeper orange
+          ctx.fillStyle = 'rgba(255,110,30,0.52)';
+          ctx.fillText(rc(), i * F, py - 2 * F);
+
+          // Advance every 3rd frame → ~280 px/s at 60 fps (classic Matrix speed)
+          if (tick % 3 === 0) {
+            col[i]++;
+            if (col[i] * F > H) col[i] = -Math.floor(Math.random() * 20);
+          }
+        }
+        rid = requestAnimationFrame(draw);
+      }
+
+      draw();
+      window._ldStop = function(){ cancelAnimationFrame(rid); };
+    })();
+  </script>
+
   <canvas id="bg-canvas"></canvas>
   <div class="rays">
     <div class="ray"></div><div class="ray"></div><div class="ray"></div>
@@ -137,7 +243,7 @@
 
     <!-- Fanta's Smart Placeholders game card -->
     <div class="cell cell-psr game-card">
-      <a href="https://modrinth.com/mod/fantas-smart-placholders" target="_blank" rel="noopener" class="card-full-link" aria-label="View Fanta's Smart Placeholders on Modrinth"></a>
+      <a href="https://modrinth.com/mod/fantas-smart-placeholders" target="_blank" rel="noopener" class="card-full-link" aria-label="View Fanta's Smart Placeholders on Modrinth"></a>
       <div class="game-cover">
         <div class="cover-bg" style="background: radial-gradient(ellipse at 60% 35%, #0a1530 0%, #060c1c 45%, #020408 100%);"></div>
         <div class="modrinth-preview-card" id="psr-preview">
@@ -165,7 +271,7 @@
         <div class="badges-row">
           <span class="modrinth-badge" id="psr-downloads"></span>
         </div>
-        <a class="project-link" href="https://modrinth.com/mod/fantas-smart-placholders" target="_blank" rel="noopener">modrinth ↗</a>
+        <a class="project-link" href="https://modrinth.com/mod/fantas-smart-placeholders" target="_blank" rel="noopener">modrinth ↗</a>
       </div>
     </div>
 
@@ -254,10 +360,13 @@
   <script src="background.js"></script>
 
   <script>
-    // Fluid sim is WebGL-heavy — skip entirely on touch/mobile devices
+    // _isDesktop gates heavy extras (Twitch embed etc.) — untouched
     const _isDesktop = window.matchMedia('(pointer: fine)').matches && window.innerWidth > 900;
+    // Fluid sim runs everywhere that has a screen wide enough; touch = ambient-only
+    const _isTouch   = !window.matchMedia('(pointer: fine)').matches;
+    const _fluidOk   = window.innerWidth >= 480;
 
-    if (_isDesktop) {
+    if (_fluidOk) {
       function ga() {}
 
       window.dat = { GUI: class {
@@ -278,32 +387,45 @@
       const _fluidScript = document.createElement('script');
       _fluidScript.src = 'fluid.js';
       _fluidScript.onload = function () {
-        config.COLORFUL             = false;
-        config.TRANSPARENT          = true;
-        config.BLOOM                = false;
-        config.DENSITY_DISSIPATION  = 3.5;
-        config.SUNRAYS              = false;
+        config.COLORFUL            = false;
+        config.TRANSPARENT         = true;
+        config.BLOOM               = false;
+        config.SUNRAYS             = false;
+        // Mobile: lighter sim — dissipates faster, lower pressure cost
+        if (_isTouch) {
+          config.DENSITY_DISSIPATION  = 5.5;
+          config.VELOCITY_DISSIPATION = 1.8;
+          config.PRESSURE_ITERATIONS  = 12;
+          config.SIM_RESOLUTION       = 64;
+          config.DYE_RESOLUTION       = 512;
+        } else {
+          config.DENSITY_DISSIPATION  = 3.5;
+        }
         window.drawCheckerboard = () => {};
         initFramebuffers();
-        setInterval(() => splatStack.push(1), 2500);
+        // Ambient auto-splats on all devices
+        setInterval(() => splatStack.push(1), _isTouch ? 3500 : 2500);
 
-        let _fpx = -1, _fpy = -1;
-        window.addEventListener('mousemove', e => {
-          if (_fpx < 0) { _fpx = e.clientX; _fpy = e.clientY; return; }
-          const dx = e.clientX - _fpx, dy = e.clientY - _fpy;
-          if (Math.abs(dx) + Math.abs(dy) < 1) return;
-          const color = generateColor();
-          color.r *= 3; color.g *= 3; color.b *= 3;
-          splat(
-            e.clientX / window.innerWidth,
-            1.0 - e.clientY / window.innerHeight,
-            dx / window.innerWidth  * config.SPLAT_FORCE,
-           -dy / window.innerHeight * config.SPLAT_FORCE,
-            color
-          );
-          _fpx = e.clientX; _fpy = e.clientY;
-        });
-        document.addEventListener('mouseleave', () => { _fpx = -1; _fpy = -1; });
+        // Cursor-driven splats — pointer: fine + wide screen only (original behaviour)
+        if (_isDesktop) {
+          let _fpx = -1, _fpy = -1;
+          window.addEventListener('mousemove', e => {
+            if (_fpx < 0) { _fpx = e.clientX; _fpy = e.clientY; return; }
+            const dx = e.clientX - _fpx, dy = e.clientY - _fpy;
+            if (Math.abs(dx) + Math.abs(dy) < 1) return;
+            const color = generateColor();
+            color.r *= 3; color.g *= 3; color.b *= 3;
+            splat(
+              e.clientX / window.innerWidth,
+              1.0 - e.clientY / window.innerHeight,
+              dx / window.innerWidth  * config.SPLAT_FORCE,
+             -dy / window.innerHeight * config.SPLAT_FORCE,
+              color
+            );
+            _fpx = e.clientX; _fpy = e.clientY;
+          });
+          document.addEventListener('mouseleave', () => { _fpx = -1; _fpy = -1; });
+        }
       };
       document.body.appendChild(_fluidScript);
     }
@@ -464,6 +586,73 @@
         const max = document.documentElement.scrollHeight - window.innerHeight;
         bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
       }, { passive: true });
+    })();
+  </script>
+
+  <!-- ── Loading screen dismiss ── -->
+  <script>
+    (function () {
+      var ld       = document.getElementById('ld');
+      var MIN_MS   = 650;
+      var HARD_CAP = 3000;
+      var start    = Date.now();
+      var gone     = false;
+
+      function dismiss() {
+        if (gone) return;
+        gone = true;
+        var wait = Math.max(0, MIN_MS - (Date.now() - start));
+        setTimeout(function () {
+          // Cells start entering immediately, behind the still-visible overlay
+          document.body.classList.add('cells-ready');
+
+          var nameEl = document.getElementById('ld-name');
+          var FULL   = 'fantacat';
+          var rem    = FULL.length;
+
+          function putCursor() {
+            if (!nameEl) return;
+            var c = document.createElement('i');
+            c.id = 'ld-cursor';
+            nameEl.appendChild(c);
+          }
+
+          function fadeOut() {
+            if (typeof window._ldStop === 'function') window._ldStop();
+            if (ld) ld.classList.add('out');
+            setTimeout(function () {
+              if (ld && ld.parentNode) ld.parentNode.removeChild(ld);
+            }, 460);
+          }
+
+          function del() {
+            rem--;
+            if (nameEl) {
+              var t = FULL.slice(0, rem);
+              nameEl.innerHTML = rem > 5
+                ? 'fanta<span>' + t.slice(5) + '</span>'
+                : t;
+              putCursor();
+            }
+            if (rem <= 0) {
+              setTimeout(fadeOut, 90);
+              return;
+            }
+            setTimeout(del, 36);
+          }
+
+          // Cursor appears, blinks once, then deletion begins
+          putCursor();
+          setTimeout(del, 120);
+        }, wait);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', dismiss, { once: true });
+      } else {
+        dismiss();
+      }
+      setTimeout(dismiss, HARD_CAP);
     })();
   </script>
 
