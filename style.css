@@ -1397,39 +1397,51 @@ body.streaming .live-dot { display: inline-block; }
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
-  padding: 1rem 1.1rem 0.9rem;
-  background: linear-gradient(160deg, #1a2535 0%, #0f1924 60%, #0a1218 100%);
+  padding: 1rem 1.1rem 3.5rem;
+  background: linear-gradient(160deg, #192230 0%, #0e1822 55%, #090f18 100%);
   border-radius: inherit;
   overflow: hidden;
+  border-top: 2px solid rgba(27,217,106,0.30);
+}
+
+.modrinth-preview-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(9,15,24,0.97) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .mrp-header {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 
 .mrp-icon {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 8px;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.05);
+  background: rgba(27,217,106,0.06);
+  border: 1px solid rgba(27,217,106,0.22);
+  box-shadow: 0 0 10px rgba(27,217,106,0.10);
 }
 
 .mrp-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.05rem;
+  gap: 0.08rem;
   flex: 1;
   min-width: 0;
 }
 
 .mrp-title {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #e8f0fe;
+  color: #edf4ff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1437,23 +1449,23 @@ body.streaming .live-dot { display: inline-block; }
 
 .mrp-author {
   font-size: 0.65rem;
-  color: #6b8ab0;
+  color: #5a7a9a;
 }
 
 .mrp-logo {
-  height: 0.9rem;
-  opacity: 0.45;
+  height: 0.85rem;
+  opacity: 0.55;
   flex-shrink: 0;
-  filter: invert(1);
+  filter: invert(1) brightness(1.1);
 }
 
 .mrp-desc {
   font-size: 0.68rem;
-  color: #8ba8c8;
-  line-height: 1.45;
+  color: #7a9ab8;
+  line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin: 0;
@@ -1464,16 +1476,19 @@ body.streaming .live-dot { display: inline-block; }
   gap: 0.4rem;
   flex-wrap: wrap;
   margin-top: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .mrp-stat {
   font-size: 0.65rem;
   font-weight: 600;
-  padding: 0.15rem 0.5rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 100px;
-  background: rgba(27,217,106,0.08);
-  border: 1px solid rgba(27,217,106,0.2);
+  background: rgba(27,217,106,0.09);
+  border: 1px solid rgba(27,217,106,0.25);
   color: #1bd96a;
+  letter-spacing: 0.01em;
 }
 
 .mrp-tag {

@@ -242,7 +242,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
   const downloadsBadge = document.getElementById('psr-downloads');
   if (!versionBadge && !downloadsBadge) return;
 
-  const slug = 'fantas-smart-placholders';
+  const slug = 'fantas-smart-placeholders';
 
   Promise.all([
     fetch(`https://api.modrinth.com/v2/project/${slug}`).then(r => r.ok ? r.json() : Promise.reject()),
@@ -273,9 +273,9 @@ if (window.matchMedia('(pointer: fine)').matches) {
     if (verStat && versions.length) verStat.textContent = '◈ ' + versions[0].version_number;
   }).catch(() => {
     // Modrinth not yet live — show hardcoded fallback
-    if (versionBadge) { versionBadge.textContent = 'v1.5'; versionBadge.style.display = 'inline-flex'; }
+    if (versionBadge) { versionBadge.textContent = 'v1.6.0'; versionBadge.style.display = 'inline-flex'; }
     const verStat = document.getElementById('psr-mrp-version');
-    if (verStat) verStat.textContent = '◈ 1.5';
+    if (verStat) verStat.textContent = '◈ 1.6.0';
     const desc = document.getElementById('psr-mrp-desc');
     if (desc) desc.textContent = 'A server-side Fabric mod adding live status, custom name colors, roles, no-sleep toggling, and voice chat indicators via Placeholder API.';
   });
