@@ -236,46 +236,62 @@ if (window.matchMedia('(pointer: fine)').matches) {
   }, 1000);
 })();
 
-// ── Fanta's Smart Placeholders badges (Modrinth) ─────────────────
+// ── Fanta's Smart Placeholders badges (Modrinth + GitHub) ─────────
 (function () {
   const versionBadge   = document.getElementById('psr-version');
   const downloadsBadge = document.getElementById('psr-downloads');
-  if (!versionBadge && !downloadsBadge) return;
+  const starsBadge     = document.getElementById('psr-stars');
 
-  const slug = 'fantas-smart-placeholders';
+  const slug   = 'fantas-smart-placeholders';
+  const ghRepo = 'fantac4t/PlayerStatusReal';
+
+  function fmtCount(n) { return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n); }
+
+  function countUp(el, prefix, suffix, target, duration) {
+    const t0 = performance.now();
+    (function step(now) {
+      const p    = Math.min((now - t0) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + fmtCount(Math.round(target * ease)) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
 
   Promise.all([
     fetch(`https://api.modrinth.com/v2/project/${slug}`).then(r => r.ok ? r.json() : Promise.reject()),
     fetch(`https://api.modrinth.com/v2/project/${slug}/version`).then(r => r.ok ? r.json() : Promise.reject()),
-  ]).then(([project, versions]) => {
-    const fmtCount = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n);
-
+    fetch(`https://api.github.com/repos/${ghRepo}`).then(r => r.ok ? r.json() : null).catch(() => null),
+  ]).then(([project, versions, gh]) => {
     if (versionBadge && versions.length) {
       versionBadge.textContent   = 'v' + versions[0].version_number;
       versionBadge.style.display = 'inline-flex';
     }
+
     if (downloadsBadge && project.downloads != null) {
-      downloadsBadge.textContent   = '⬇ ' + fmtCount(project.downloads) + ' downloads';
       downloadsBadge.style.display = 'inline-flex';
+      countUp(downloadsBadge, '⬇ ', ' downloads', project.downloads, 1000);
     }
 
-    // populate preview card
+    if (starsBadge && gh?.stargazers_count != null) {
+      starsBadge.textContent   = '★ ' + gh.stargazers_count + ' stars';
+      starsBadge.style.display = 'inline-flex';
+    }
+
+    // ── MC version tag ──────────────────────────────────────────────
+    const mcTag = document.getElementById('psr-mc-version');
+    if (mcTag && versions.length) {
+      const mcVer = versions[0].game_versions?.[0];
+      if (mcVer) mcTag.textContent = mcVer;
+    }
+
+    // ── Cover logo ──────────────────────────────────────────────────
     const icon = document.getElementById('psr-icon');
     if (icon && project.icon_url) { icon.src = project.icon_url; icon.alt = project.title; }
-
-    const desc = document.getElementById('psr-mrp-desc');
-    if (desc && project.description) desc.textContent = project.description;
-
-    const dlStat = document.getElementById('psr-mrp-downloads');
-    if (dlStat && project.downloads != null) dlStat.textContent = '⬇ ' + fmtCount(project.downloads);
-
-    const verStat = document.getElementById('psr-mrp-version');
-    if (verStat && versions.length) verStat.textContent = '◈ ' + versions[0].version_number;
   }).catch(() => {
-    // Modrinth not yet live — show hardcoded fallback
-    if (versionBadge) { versionBadge.textContent = 'v1.6.0'; versionBadge.style.display = 'inline-flex'; }
+    if (versionBadge) { versionBadge.textContent = 'v1.6.1'; versionBadge.style.display = 'inline-flex'; }
+    if (downloadsBadge) { downloadsBadge.textContent = '⬇ downloads'; downloadsBadge.style.display = 'inline-flex'; }
     const verStat = document.getElementById('psr-mrp-version');
-    if (verStat) verStat.textContent = '◈ 1.6.0';
+    if (verStat) verStat.textContent = '◈ 1.6.1';
     const desc = document.getElementById('psr-mrp-desc');
     if (desc) desc.textContent = 'A server-side Fabric mod adding live status, custom name colors, roles, no-sleep toggling, and voice chat indicators via Placeholder API.';
   });
@@ -303,20 +319,6 @@ if (window.matchMedia('(pointer: fine)').matches) {
       .catch(() => {
         window.location.href = 'mailto:vanushka060@gmail.com';
       });
-  });
-})();
-
-// ── Click-to-copy Discord username ───────────────────────────────
-(function () {
-  const chip = document.querySelector('.contact-discord');
-  if (!chip) return;
-  const label = chip.querySelector('span');
-  chip.addEventListener('click', () => {
-    navigator.clipboard.writeText('fantacat').then(() => {
-      label.textContent = 'copied ✓';
-      chip.style.color  = '#5865f2';
-      setTimeout(() => { label.textContent = '@fantacat'; chip.style.color = ''; }, 2000);
-    });
   });
 })();
 
@@ -410,8 +412,22 @@ if (window.matchMedia('(pointer: fine)').matches) {
         return `<rect x="${col * STEP}" y="${row * STEP}" width="${CELL}" height="${CELL}" rx="1.5" fill="${color}"><title>${d.date}: ${d.count} contribution${d.count !== 1 ? 's' : ''}</title></rect>`;
       }).join('');
 
+      // Month labels above the grid
+      const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      let lastMo = -1;
+      const monthLabels = [];
+      for (let col = 0; col < WEEKS; col++) {
+        const d = days[col * 7];
+        if (!d) continue;
+        const mo = new Date(d.date).getMonth();
+        if (mo !== lastMo) {
+          monthLabels.push(`<text x="${col * STEP}" y="-2" font-size="7" fill="rgba(255,170,107,0.55)" font-family="'Space Grotesk',system-ui,sans-serif">${MO[mo]}</text>`);
+          lastMo = mo;
+        }
+      }
+      const TOP = 12;
       container.innerHTML =
-        `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">${rects}</svg>`;
+        `<svg width="${svgW}" height="${svgH + TOP}" viewBox="0 ${-TOP} ${svgW} ${svgH + TOP}">${monthLabels.join('')}${rects}</svg>`;
 
       const yr  = new Date().getFullYear();
       const ytd = total[yr] ?? Object.values(total).reduce((a, b) => a + b, 0);
@@ -458,6 +474,10 @@ if (window.matchMedia('(pointer: fine)').matches) {
         if (m > 0) return `${m}m`;
         return '< 1m';
       }
+
+      // Show total coding time in the label
+      const totalEl = document.getElementById('waka-total-time');
+      if (totalEl && totalSecs > 0) totalEl.textContent = '· ' + fmtTime(totalSecs);
 
       container.innerHTML = top5.map(lang => {
         const langSecs = (lang.percent / 100) * totalSecs;
@@ -507,5 +527,34 @@ if (window.matchMedia('(pointer: fine)').matches) {
     });
     ticking = true;
   }, { passive: true });
+})();
+
+// ── TSNSMP live player count ─────────────────────────────────────
+(function () {
+  const badge = document.getElementById('tsnsmp-status');
+  if (!badge) return;
+
+  function fetchStatus() {
+    fetch('https://api.mcsrvstat.us/3/play.tsnsmp.online')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        badge.className = '';
+        badge.classList.add('tsnsmp-badge');
+        if (data.online) {
+          const count = data.players?.online ?? 0;
+          const max   = data.players?.max   ?? 0;
+          badge.textContent = `● ${count}/${max} online`;
+          badge.classList.add('tsnsmp-badge--online');
+        } else {
+          badge.textContent = '○ offline';
+          badge.classList.add('tsnsmp-badge--offline');
+        }
+        badge.style.display = 'inline-flex';
+      })
+      .catch(() => {});
+  }
+
+  fetchStatus();
+  setInterval(fetchStatus, 60000);
 })();
 

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fantacat</title>
+  <title>fantacat — dev & server owner</title>
+  <meta name="theme-color" content="#0d0905" />
   <meta name="description" content="hey, i'm fantacat — i build stuff, run a minecraft server, and stream sometimes. welcome to my corner of the internet." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://fantacat.net/" />
@@ -23,8 +24,9 @@
   <link rel="preconnect" href="https://cdn.modrinth.com" crossorigin />
   <link rel="preconnect" href="https://cdn.discordapp.com" crossorigin />
   <link rel="preconnect" href="https://github-contributions-api.jogruber.de" />
+  <link rel="preconnect" href="https://api.mcsrvstat.us" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="20231007_040528.png" type="image/png">
 
   <!-- ── Loading screen — inlined so it paints before style.css ── -->
   <style>
@@ -139,15 +141,6 @@
 
     <!-- HERO -->
     <div class="cell cell-hero">
-      <div class="hero-stream-bg" id="hero-stream-bg">
-        <div id="hero-twitch-embed"></div>
-        <div class="hero-stream-overlay"></div>
-        <a href="https://www.twitch.tv/fantac4t" target="_blank" rel="noopener" aria-label="Watch live on Twitch" style="position:absolute;inset:0;z-index:4;pointer-events:none;"></a>
-      </div>
-      <div class="hero-live-indicator">
-        <span class="dot"></span>
-        LIVE
-      </div>
       <div class="cell-hero-inner">
         <img class="hero-avatar" src="20231007_040528.png" alt="fantacat" />
         <span class="hero-tag">i run tsnsmp &nbsp;·&nbsp; i make stuff &nbsp;·&nbsp; i stream sometimes</span>
@@ -197,6 +190,7 @@
           <span class="hero-waka-label">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             last 7 days
+            <span id="waka-total-time" class="waka-total-time"></span>
           </span>
           <div class="waka-lang-bars" id="waka-lang-bars">
             <div class="waka-bar"><span class="waka-bar-name shimmer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><div class="waka-bar-track shimmer"></div><span class="waka-bar-time shimmer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
@@ -237,6 +231,9 @@
         <h3>TSNSMP</h3>
         <p class="game-desc">my minecraft server — i handle everything from the infrastructure to the mods to the website. it's a lot but i like it.</p>
         <div class="tags"><span class="tag">Minecraft</span><span class="tag">Java</span><span class="tag">Server Admin</span></div>
+        <div class="badges-row">
+          <span class="tsnsmp-badge" id="tsnsmp-status"></span>
+        </div>
         <a class="project-link" href="https://www.tsnsmp.online" target="_blank" rel="noopener">tsnsmp.online ↗</a>
       </div>
     </div>
@@ -246,32 +243,31 @@
       <a href="https://modrinth.com/mod/fantas-smart-placeholders" target="_blank" rel="noopener" class="card-full-link" aria-label="View Fanta's Smart Placeholders on Modrinth"></a>
       <div class="game-cover">
         <div class="cover-bg" style="background: radial-gradient(ellipse at 60% 30%, #0d1e38 0%, #070f1c 50%, #020408 100%), radial-gradient(ellipse at 20% 85%, rgba(27,217,106,0.06) 0%, transparent 55%);"></div>
-        <div class="modrinth-preview-card" id="psr-preview">
-          <div class="mrp-header">
-            <img class="mrp-icon" id="psr-icon" src="" alt="" />
-            <div class="mrp-meta">
-              <span class="mrp-title">Fanta's Smart Placeholders</span>
-              <span class="mrp-author">by fantac4t</span>
-            </div>
-            <img class="mrp-logo" src="https://cdn.modrinth.com/landing-new/modrinth-text-logo-dark.svg" alt="Modrinth" />
-          </div>
-          <p class="mrp-desc" id="psr-mrp-desc">Loading…</p>
-          <div class="mrp-stats">
-            <span class="mrp-stat" id="psr-mrp-downloads">⬇ —</span>
-            <span class="mrp-stat" id="psr-mrp-version">◈ —</span>
-            <span class="mrp-stat mrp-tag">Fabric</span>
-          </div>
+        <div class="psr-cover-logo">
+          <img id="psr-icon" src="" alt="Fanta's Smart Placeholders" class="psr-logo-img" />
         </div>
+        <div class="cover-overlay"></div>
       </div>
       <div class="game-info">
         <div class="cell-role">i made and maintain this</div>
         <h3>Fanta's Smart Placeholders <span class="version-badge" id="psr-version"></span></h3>
         <p class="game-desc">a server-side fabric mod adding live status, custom name colors, roles, no-sleep toggling, and voice chat indicators via Placeholder API.</p>
-        <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">Server-side</span><span class="tag">1.21.11</span></div>
+        <div class="tags"><span class="tag">Java</span><span class="tag">Fabric API</span><span class="tag">Server-side</span><span class="tag" id="psr-mc-version">1.21.11</span></div>
+        <div class="psr-feats">
+          <span class="psr-feat">🔴 Live Status</span>
+          <span class="psr-feat">🎨 Colors</span>
+          <span class="psr-feat">💤 No-Sleep</span>
+          <span class="psr-feat">🏷️ Roles</span>
+          <span class="psr-feat">🎙️ Voice</span>
+        </div>
         <div class="badges-row">
           <span class="modrinth-badge" id="psr-downloads"></span>
+          <span class="gh-stars-badge" id="psr-stars"></span>
         </div>
-        <a class="project-link" href="https://modrinth.com/mod/fantas-smart-placeholders" target="_blank" rel="noopener">modrinth ↗</a>
+        <div class="project-links-row">
+          <a class="project-link" href="https://modrinth.com/mod/fantas-smart-placeholders" target="_blank" rel="noopener">modrinth ↗</a>
+          <a class="project-link project-link-gh" href="https://github.com/fantac4t/PlayerStatusReal" target="_blank" rel="noopener">github ↗</a>
+        </div>
       </div>
     </div>
 
@@ -298,9 +294,18 @@
     <div class="cell cell-overlays game-card">
       <div class="game-cover">
         <div class="cover-bg" style="background: radial-gradient(ellipse at 50% 45%, #1a1a08 0%, #0d0d04 50%, #050501 100%);"></div>
-        <!-- 🧅 onion because overlays = layers -->
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:6rem;line-height:1;filter:drop-shadow(0 4px 24px rgba(0,0,0,0.6));">🧅</span>
+        <div class="overlay-preview" aria-hidden="true">
+          <div class="ovp-bracket ovp-tl"></div>
+          <div class="ovp-bracket ovp-tr"></div>
+          <div class="ovp-bracket ovp-bl"></div>
+          <div class="ovp-bracket ovp-br"></div>
+          <div class="ovp-scanline"></div>
+          <div class="ovp-body">
+            <div class="ovp-badge">● Starting Soon</div>
+            <div class="ovp-bar-row"><div class="ovp-bar-fill"></div></div>
+          </div>
+          <div class="ovp-cam"><div class="ovp-cam-head"></div></div>
+          <div class="ovp-alert"><span class="ovp-alert-icon">♡</span> New Follower!</div>
         </div>
         <div class="cover-overlay"></div>
       </div>
@@ -317,24 +322,35 @@
     <div class="cell cell-skills">
       <div class="skills-label">Skills</div>
       <div class="skill-chips">
+        <span class="skill-cat">lang</span>
         <span class="chip" style="--c:#ffaa6b">Java</span>
         <span class="chip" style="--c:#ff85b3">JavaScript</span>
         <span class="chip" style="--c:#ffe066">Python</span>
         <span class="chip" style="--c:#5ccfcf">SQL</span>
         <span class="chip" style="--c:#a78bfa">C#</span>
+        <span class="skill-divider"></span>
+        <span class="skill-cat">web</span>
         <span class="chip" style="--c:#ff8c69">HTML &amp; CSS</span>
-        <span class="chip" style="--c:#ffaa6b">Fabric API</span>
         <span class="chip" style="--c:#ff85b3">Firebase</span>
         <span class="chip" style="--c:#ffe066">Cloudflare Workers</span>
-        <span class="chip" style="--c:#5ccfcf">Unity</span>
+        <span class="skill-divider"></span>
+        <span class="skill-cat">tools</span>
         <span class="chip" style="--c:#a78bfa">Git</span>
         <span class="chip" style="--c:#ff8c69">Gradle</span>
         <span class="chip" style="--c:#7ebae4">Nix</span>
+        <span class="skill-divider"></span>
+        <span class="skill-cat">game</span>
+        <span class="chip" style="--c:#ffaa6b">Fabric API</span>
+        <span class="chip" style="--c:#5ccfcf">Unity</span>
       </div>
     </div>
 
     <!-- Contact -->
     <div class="cell cell-contact">
+      <div class="contact-avail">
+        <span class="avail-dot"></span>
+        open for collabs
+      </div>
       <h3>say hi</h3>
       <p>got something cool in mind, or just wanna chat? hit me up.</p>
       <div class="contact-links">
@@ -436,39 +452,6 @@
 
   <script src="cursor.js"></script>
   <script src="favicon.js"></script>
-
-  <script>
-    if (_isDesktop) (function () {
-      const bg           = document.getElementById('hero-stream-bg');
-      const defaultTitle = document.title;
-
-      const s = document.createElement('script');
-      s.src = 'https://embed.twitch.tv/embed/v1.js';
-      s.onload = function () {
-        const embed = new Twitch.Embed('hero-twitch-embed', {
-          channel:  'fantac4t',
-          layout:   'video',
-          autoplay: true,
-          muted:    true,
-          width:    '100%',
-          height:   '100%',
-        });
-        embed.addEventListener(Twitch.Embed.ONLINE, () => {
-          if (bg) bg.classList.add('is-live');
-          document.body.classList.add('streaming');
-          document.title = '● LIVE — fantacat';
-          window._faviconState?.('live');
-        });
-        embed.addEventListener(Twitch.Embed.OFFLINE, () => {
-          if (bg) bg.classList.remove('is-live');
-          document.body.classList.remove('streaming');
-          document.title = defaultTitle;
-          window._faviconState?.('default');
-        });
-      };
-      document.head.appendChild(s);
-    })();
-  </script>
 
   <script>
     (function () {

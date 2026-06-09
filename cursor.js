@@ -24,7 +24,7 @@
     ring.classList.toggle('is-hover', on);
   }
 
-  document.querySelectorAll('a, button, .btn, .chip, .social-btn').forEach(el => {
+  document.querySelectorAll('a, button, .btn, .chip, .social-btn, .game-card').forEach(el => {
     el.addEventListener('mouseenter', () => setHover(true));
     el.addEventListener('mouseleave', () => setHover(false));
   });

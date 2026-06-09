@@ -283,122 +283,6 @@ a { color: inherit; text-decoration: none; }
   z-index: 1;
 }
 
-.hero-stream-bg {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  width: 248px;
-  height: 140px; /* 16:9 */
-  border-radius: 10px;
-  overflow: hidden;
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.9s ease, box-shadow 0.25s ease;
-  border: 1.5px solid rgba(255, 55, 55, 0.45);
-  box-shadow:
-    0 4px 22px rgba(0,0,0,0.6),
-    0 0 16px rgba(255,30,30,0.18);
-}
-
-.hero-stream-bg.is-live {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.hero-stream-bg.is-live a {
-  pointer-events: auto;
-}
-
-.hero-stream-bg.is-live:hover {
-  box-shadow:
-    0 4px 22px rgba(0,0,0,0.6),
-    0 0 24px rgba(255,30,30,0.35);
-}
-
-#hero-twitch-embed {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.hero-stream-bg iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  border: none;
-  pointer-events: none;
-}
-
-.hero-stream-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(0,0,0,0.12) 0%,
-    transparent 25%,
-    transparent 75%,
-    rgba(0,0,0,0.22) 100%
-  );
-  pointer-events: none;
-}
-
-/* LIVE badge — anchored to top-left corner of the stream panel */
-.hero-live-indicator {
-  display: none;
-  position: absolute;
-  bottom: calc(1.5rem + 140px + 0.45rem); /* just above the panel */
-  right: 1.5rem;
-  z-index: 3;
-  align-items: center;
-  gap: 0.32rem;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #fff;
-  background: rgba(210,25,25,0.88);
-  padding: 0.22rem 0.65rem 0.22rem 0.52rem;
-  border-radius: 100px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 14px rgba(255,30,30,0.45);
-}
-
-body.streaming .hero-live-indicator { display: inline-flex; }
-
-.hero-live-indicator .dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: #fff;
-  animation: livePulse 1.6s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-/* Hero border tint when live */
-body.streaming .cell-hero {
-  border-color: rgba(255,65,65,0.32);
-}
-
-/* Twitch buttons glow when live */
-@keyframes twitchLivePulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(145,70,255,0.45), 0 3px 16px rgba(145,70,255,0.25); }
-  50%       { box-shadow: 0 0 18px rgba(145,70,255,0.75), 0 3px 20px rgba(145,70,255,0.40); }
-}
-
-body.streaming .twitch-live-btn {
-  animation: twitchLivePulse 2.2s ease-in-out infinite;
-}
-
-body.streaming .social-btn.twitch-live-btn {
-  background: rgba(145,70,255,0.18);
-  border-color: rgba(145,70,255,0.65);
-  color: #b07fff;
-}
-
-body.streaming .btn-outline.twitch-live-btn {
-  border-color: rgba(145,70,255,0.65);
-  color: #b07fff;
-  background: rgba(145,70,255,0.10);
-}
-
 .cell-hero-inner {
   display: flex;
   flex-direction: column;
@@ -526,24 +410,6 @@ body.streaming .btn-outline.twitch-live-btn {
   box-shadow: 0 6px 24px rgba(255,140,105,0.5);
 }
 
-/* Live indicator dot — hidden until streaming */
-.live-dot {
-  display: none;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #ff3b3b;
-  box-shadow: 0 0 6px rgba(255,60,60,0.8);
-  animation: livePulse 1.6s ease-in-out infinite;
-  flex-shrink: 0;
-}
-
-body.streaming .live-dot { display: inline-block; }
-
-@keyframes livePulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.45; transform: scale(0.65); }
-}
-
 .btn-outline {
   background: transparent;
   color: var(--text);
@@ -655,7 +521,7 @@ body.streaming .live-dot { display: inline-block; }
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  z-index: 3;
+  z-index: 5;
 }
 
 .game-card:hover .game-info {
@@ -843,11 +709,42 @@ body.streaming .live-dot { display: inline-block; }
               0 2px 8px  color-mix(in srgb, var(--c) 15%, transparent);
 }
 
+/* ── WakaTime total time ── */
+.waka-total-time {
+  font-weight: 500;
+  opacity: 0.75;
+  letter-spacing: 0.02em;
+}
+
 /* ── Contact cell ── */
 .cell-contact {
   justify-content: center;
   text-align: center;
   gap: 0.5rem;
+}
+
+.contact-avail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.22);
+  color: #4ade80;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.65rem;
+  border-radius: 100px;
+}
+
+.avail-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74,222,128,0.75);
+  flex-shrink: 0;
+  animation: statusPulse 2.8s ease-in-out infinite;
 }
 
 .cell-contact h3 { font-size: 1.18rem; font-weight: 700; }
@@ -1509,6 +1406,113 @@ body.streaming .live-dot { display: inline-block; }
   letter-spacing: 0.01em;
 }
 
+.gh-stars-badge {
+  display: none;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.13rem 0.46rem;
+  border-radius: 100px;
+  background: rgba(255,170,107,0.1);
+  border: 1px solid rgba(255,170,107,0.3);
+  color: var(--orange);
+  letter-spacing: 0.01em;
+}
+
+.project-links-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.project-link-gh {
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+.project-link-gh:hover { color: var(--text); }
+
+/* ── PSR card: feature chips in game-info (hover-reveal) ── */
+.psr-feats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s ease 0.09s, transform 0.30s cubic-bezier(0.34,1.56,0.64,1) 0.09s;
+}
+
+.game-card:hover .psr-feats {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.psr-feat {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.13rem 0.42rem;
+  border-radius: 100px;
+  background: rgba(27,217,106,0.09);
+  border: 1px solid rgba(27,217,106,0.22);
+  color: rgba(80,185,120,0.9);
+  white-space: nowrap;
+}
+
+/* On hover, make PSR game-info bg more opaque so preview card doesn't bleed through */
+.cell-psr.game-card:hover .game-info {
+  background: linear-gradient(to top,
+    rgba(4,2,1,0.99) 0%,
+    rgba(4,2,1,0.97) 60%,
+    rgba(4,2,1,0.82) 85%,
+    rgba(4,2,1,0.35) 100%
+  );
+}
+
+.mrp-gh-stars {
+  background: rgba(255,170,107,0.08);
+  border-color: rgba(255,170,107,0.22);
+  color: var(--orange);
+}
+
+/* ── PSR cover: centered logo ── */
+.psr-cover-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.psr-logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 1px rgba(27,217,106,0.2),
+    0 0 40px rgba(27,217,106,0.22),
+    0 10px 36px rgba(0,0,0,0.55);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease;
+}
+
+.cell-psr.game-card:hover .psr-logo-img {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 1px rgba(27,217,106,0.4),
+    0 0 55px rgba(27,217,106,0.38),
+    0 14px 44px rgba(0,0,0,0.65);
+}
+
+/* ── PSR cover animated glow ── */
+@keyframes psrGlow {
+  from { filter: brightness(1)    saturate(1);   }
+  to   { filter: brightness(1.14) saturate(1.25); }
+}
+
+.cell-psr .cover-bg {
+  animation: psrGlow 4.5s ease-in-out infinite alternate;
+}
+
 /* ── Konami code easter egg ── */
 @keyframes konamiShake {
   0%   { transform: rotate(0deg) scale(1); }
@@ -1588,4 +1592,167 @@ body.streaming .live-dot { display: inline-block; }
 
 .gradius-hint:hover {
   color: rgba(255,200,150,0.55);
+}
+
+/* ── Skill category labels & dividers ── */
+.skill-cat {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,170,107,0.38);
+  align-self: center;
+  white-space: nowrap;
+}
+
+.skill-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255,170,107,0.15);
+  border-radius: 1px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* ── Stream Overlays: animated overlay preview ── */
+.overlay-preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ovp-bracket {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: rgba(255,220,70,0.55);
+  border-style: solid;
+}
+.ovp-tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+.ovp-tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+.ovp-bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+.ovp-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+.ovp-scanline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent, transparent 3px,
+    rgba(255,210,60,0.018) 3px, rgba(255,210,60,0.018) 4px
+  );
+}
+
+.ovp-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ovp-badge {
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,224,80,0.85);
+  animation: ovpPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes ovpPulse {
+  0%, 100% { opacity: 0.75; }
+  50%       { opacity: 1; }
+}
+
+.ovp-bar-row {
+  width: 72px; height: 3px;
+  background: rgba(255,255,255,0.09);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.ovp-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffe066, #ffaa6b);
+  border-radius: 99px;
+  animation: ovpBar 3.8s ease-in-out infinite;
+}
+
+@keyframes ovpBar {
+  0%   { width: 4%; }
+  75%  { width: 96%; }
+  100% { width: 96%; }
+}
+
+.ovp-cam {
+  position: absolute;
+  bottom: 20px; left: 20px;
+  width: 34px; height: 26px;
+  border-radius: 4px;
+  background: rgba(15,10,5,0.88);
+  border: 1px solid rgba(255,210,60,0.32);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ovp-cam-head {
+  width: 13px; height: 15px;
+  background: rgba(255,200,150,0.22);
+  border-radius: 50% 50% 0 0;
+  margin-bottom: -2px;
+}
+
+.ovp-alert {
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255,220,90,0.88);
+  background: rgba(0,0,0,0.52);
+  border: 1px solid rgba(255,200,70,0.28);
+  border-radius: 4px;
+  padding: 0.18rem 0.38rem;
+  white-space: nowrap;
+  animation: ovpSlide 5s ease-in-out infinite;
+}
+
+@keyframes ovpSlide {
+  0%, 100% { opacity: 0; transform: translateX(10px); }
+  15%, 72%  { opacity: 1; transform: translateX(0);   }
+  88%       { opacity: 0; transform: translateX(10px); }
+}
+
+.ovp-alert-icon { margin-right: 2px; }
+
+/* Scale brackets / demo down on small cards (mobile stacked) */
+@media (max-width: 900px) {
+  .overlay-preview { display: none; }
+}
+
+/* ── TSNSMP live player badge ── */
+.tsnsmp-badge {
+  display: none;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.14rem 0.48rem;
+  border-radius: 100px;
+  letter-spacing: 0.01em;
+}
+.tsnsmp-badge--online {
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: #4ade80;
+}
+.tsnsmp-badge--offline {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.3);
 }
