@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import NowPlaying from '../components/NowPlaying.astro';
+import StatsRow from '../components/StatsRow.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import OrnamentDivider from '../components/OrnamentDivider.astro';
+---
+
+<Layout>
+  <main>
+    <Hero />
+    <NowPlaying />
+    <StatsRow />
+    <ProjectsSection />
+    <OrnamentDivider id="orn-a" />
+    <SkillsSection />
+    <ContactSection />
+  </main>
+</Layout>
+
+<script>
+  import '../scripts/favicon.ts';
+  import '../scripts/live-status.ts';
+  import '../scripts/stats.ts';
+  import '../scripts/lanyard.ts';
+  import '../scripts/lastfm.ts';
+  import '../scripts/name-cycle.ts';
+  import '../scripts/copy.ts';
+  import '../scripts/reveal.ts';
+  import '../scripts/tilt.ts';
+  import '../scripts/magnetic.ts';
+  import '../scripts/scroll-progress.ts';
+  import '../scripts/konami.ts';
+</script>

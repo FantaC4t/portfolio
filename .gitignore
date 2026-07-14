@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Astro
+dist/
+.astro/
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

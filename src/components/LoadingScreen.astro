@@ -1,0 +1,113 @@
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <p class="loader-name">fanta<span class="loader-accent">cat</span><span class="loader-caret"></span></p>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const loader = document.getElementById('loader');
+    if (!loader) return;
+
+    const MIN_MS = 550;
+    const HARD_CAP = 2200;
+    const start = Date.now();
+    let done = false;
+
+    function dismiss() {
+      if (done) return;
+      done = true;
+      const wait = Math.max(0, MIN_MS - (Date.now() - start));
+      setTimeout(() => {
+        loader.classList.add('out');
+        setTimeout(() => loader.remove(), 500);
+      }, wait);
+    }
+
+    if (document.readyState === 'complete') dismiss();
+    else window.addEventListener('load', dismiss, { once: true });
+    setTimeout(dismiss, HARD_CAP);
+  })();
+</script>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.42s cubic-bezier(0.4, 0, 0.2, 1), transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .loader.out {
+    opacity: 0;
+    transform: scale(1.03);
+    pointer-events: none;
+  }
+
+  .loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .loader-name {
+    font-family: var(--font-headline);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    letter-spacing: -0.02em;
+    color: var(--gold-bright);
+    text-shadow: 0 0 46px rgba(255, 122, 30, 0.32);
+  }
+  .loader-accent {
+    background: linear-gradient(
+      110deg,
+      var(--accent) 0%, var(--gold-bright) 28%, var(--accent) 55%, var(--accent-warm) 80%, var(--accent) 100%
+    );
+    background-size: 260% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 8s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .loader-caret {
+    display: inline-block;
+    width: 3px;
+    height: 0.78em;
+    background: var(--accent-bright);
+    margin-left: 3px;
+    vertical-align: -0.04em;
+    box-shadow: 0 0 8px rgba(255, 115, 0, 0.75);
+    animation: blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .loader-bar {
+    width: 84px;
+    height: 2px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--gold-bright));
+    animation: fillBar 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.08s forwards;
+  }
+  @keyframes fillBar { to { width: 100%; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-accent, .loader-caret, .loader-bar-fill { animation: none; }
+    .loader-bar-fill { width: 100%; }
+  }
+</style>

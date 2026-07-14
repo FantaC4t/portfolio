@@ -1,0 +1,63 @@
+<div class="section np-section">
+  <div class="now-playing" id="now-playing">
+    <div class="card-head term-head mono">
+      <span class="term-dots"><i></i><i></i><i></i></span>
+      <span>~/now/playing</span>
+    </div>
+    <div class="np-body">
+      <img class="np-art" id="np-art" alt="" />
+      <div class="np-text">
+        <a class="np-track" id="np-track" href="#" target="_blank" rel="noopener"></a>
+        <span class="np-artist" id="np-artist"></span>
+        <div class="np-progress-row">
+          <div class="np-bar-track"><div class="np-bar-fill" id="np-bar-fill"></div></div>
+          <span class="np-time mono" id="np-time"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .np-section { padding-top: 0; }
+
+  .now-playing {
+    display: none;
+    flex-direction: column;
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0 1.15rem 1.05rem;
+    overflow: hidden;
+  }
+  .now-playing.is-active { display: flex; }
+  .now-playing .card-head { margin: 0 -1.15rem 0.85rem; }
+
+  .np-body { display: flex; align-items: center; gap: 0.85rem; }
+
+  .np-art {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    flex: none;
+    box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.6);
+  }
+
+  .np-text { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 0.15rem; }
+  .np-track {
+    font-weight: 700; color: var(--ink); text-decoration: none;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .np-track:hover { color: var(--accent-bright); }
+  .np-artist { font-size: 0.82rem; color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .np-progress-row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.3rem; }
+  .np-bar-track { flex: 1; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .np-bar-fill {
+    height: 100%; width: 0%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+  }
+  .np-time { font-size: 0.68rem; color: var(--ink-dim); flex: none; }
+</style>

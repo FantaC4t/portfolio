@@ -1,0 +1,55 @@
+---
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section class="section" id="projects">
+  <div class="section-head reveal">
+    <h2 class="section-title"><span class="sec-num">&sect; i</span>projects</h2>
+  </div>
+
+  <div class="bento">
+    <ProjectCard
+      size="feature"
+      path="~/projects/tsnsmp"
+      role="i own and run this"
+      title="TSNSMP"
+      description="My Minecraft server — I handle everything from infrastructure to mods to the website. It's a lot, but I like it."
+      tags={['Minecraft', 'Java', 'Server Admin']}
+      href="https://www.tsnsmp.online"
+      statId="live-tsnsmp-stat"
+      statFallback="checking online count…"
+      heatId="live-tsnsmp-heat"
+    />
+    <ProjectCard
+      size="small"
+      path="~/mods/psr"
+      role="i made and maintain this"
+      title="Smart Placeholders"
+      description="Fabric mod for live status, name colors, roles, and voice indicators."
+      tags={['Fabric', 'Java']}
+      href="https://modrinth.com/mod/fantas-smart-placeholders"
+    />
+    <ProjectCard
+      size="small"
+      path="~/games/imposter"
+      role="i built this"
+      title="Imposter Game"
+      description="A multiplayer party game in Hebrew — real-time via Firebase."
+      tags={['JS', 'Firebase']}
+      href="https://imposter.fantacat.net"
+    />
+    <ProjectCard
+      size="feature"
+      path="~/stream/overlays"
+      role="open for commissions"
+      title="Stream Overlays"
+      description="The animated overlays I use on stream — starting soon, brb, ending, gameplay HUD. All hand-coded."
+      note='if you like what you see on my streams, message me on discord — <strong id="copy-discord-btn" title="click to copy">@fantacat</strong>'
+      tags={['HTML', 'CSS', 'OBS']}
+    />
+  </div>
+</section>
+
+<style>
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.9rem; }
+</style>

@@ -1,0 +1,113 @@
+---
+interface Props {
+  path: string;
+  role: string;
+  title: string;
+  description: string;
+  note?: string;
+  tags: string[];
+  href?: string;
+  size?: 'feature' | 'small';
+  statId?: string;
+  statFallback?: string;
+  heatId?: string;
+}
+
+const { path, role, title, description, note, tags, href, size = 'small', statId, statFallback, heatId } = Astro.props;
+
+const HEAT_WEEKS = 12;
+
+const Wrapper = href ? 'a' : 'div';
+const wrapperProps = href ? { href, target: '_blank', rel: 'noopener' } : {};
+---
+
+<Wrapper class:list={['card-link', 'reveal', size]} {...wrapperProps}>
+  <article class="card">
+    <div class="card-head term-head mono"><span class="term-dots"><i></i><i></i><i></i></span><span>{path}</span></div>
+    <div class="role mono">{role}</div>
+    <h3>{title}{href && <span class="go" aria-hidden="true">&#8599;</span>}</h3>
+    <p>{description}</p>
+    {note && <p class="note" set:html={note} />}
+    <div class="tags mono">
+      {tags.map((tag) => <span>{tag}</span>)}
+    </div>
+    {statId && (
+      <div class="stat mono" id={statId}>
+        <span class="live-dot" aria-hidden="true"></span>{statFallback}
+      </div>
+    )}
+    {heatId && (
+      <div class="heat-wrap" id={`${heatId}-wrap`}>
+        <div class="heat" id={heatId} aria-hidden="true">
+          {Array.from({ length: HEAT_WEEKS }).map(() => <i class="loading"></i>)}
+        </div>
+        <span class="heat-note mono">last 12 weeks of commits</span>
+      </div>
+    )}
+  </article>
+</Wrapper>
+
+<style>
+  .card-link { text-decoration: none; color: inherit; display: block; }
+  .card-link.feature { grid-column: span 4; }
+  .card-link.small { grid-column: span 2; }
+  @media (max-width: 760px) {
+    .card-link.feature, .card-link.small { grid-column: span 6; }
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0 1.15rem 1.15rem;
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card-link:hover .card {
+    transform: translateY(-3px);
+    border-color: rgba(255, 140, 40, 0.55);
+    box-shadow: 0 16px 36px -18px rgba(255, 115, 0, 0.45), 0 0 0 1px rgba(255, 201, 120, 0.1) inset;
+  }
+
+  .card-head { margin: 0 -1.15rem 0.85rem; }
+
+  .role { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 0.35rem; }
+  .card h3 {
+    font-size: 1.28rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--accent-bright);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .go {
+    font-size: 1rem; opacity: 0; transform: translate(-3px, 3px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .card-link:hover .go { opacity: 0.75; transform: translate(0, 0); }
+  .card p { font-size: 0.9rem; color: var(--ink-dim); line-height: 1.6; margin-bottom: 0.85rem; max-width: 30rem; }
+  .card p.note { margin-top: -0.4rem; font-size: 0.85rem; }
+  .card :global(#copy-discord-btn) {
+    cursor: pointer;
+    border-bottom: 1px dashed currentColor;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+  .tags span { font-size: 0.68rem; color: var(--ink-dim); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; }
+
+  .stat { font-size: 0.78rem; color: var(--accent-2); display: flex; align-items: center; gap: 0.4rem; }
+
+  .heat-wrap { margin-top: 0.8rem; }
+  .heat { display: flex; gap: 2px; }
+  .heat i { width: 8px; height: 8px; border-radius: 2px; display: block; background: rgba(255, 255, 255, 0.07); }
+  .heat i.loading {
+    background: linear-gradient(90deg, var(--surface-2) 25%, rgba(255, 255, 255, 0.1) 50%, var(--surface-2) 75%);
+    background-size: 200% 100%;
+    animation: heatShimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes heatShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .heat-note { display: block; font-size: 0.65rem; color: var(--ink-dim); opacity: 0.7; margin-top: 0.45rem; }
+</style>

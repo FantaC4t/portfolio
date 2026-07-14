@@ -1,0 +1,45 @@
+---
+import OrnamentDivider from './OrnamentDivider.astro';
+---
+
+<OrnamentDivider id="orn-b" />
+
+<section class="section" id="contact">
+  <div class="contact reveal">
+    <span class="avail mono"><span class="sec-num">&sect; iii</span><span class="live-dot" aria-hidden="true"></span>open for collabs</span>
+    <h2>say hi</h2>
+    <p>Got something cool in mind, or just wanna chat? Hit me up.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary copy-email-btn" href="mailto:vanushka060@gmail.com">send an email</a>
+      <a class="btn btn-ghost" href="https://discord.gg/B4pKwswkVE" target="_blank" rel="noopener">join discord</a>
+    </div>
+    <span class="gradius-hint mono">i love konami...</span>
+  </div>
+</section>
+
+<div class="footnote mono section">
+  &copy; fantacat &middot; <a href="https://github.com/fantac4t" target="_blank" rel="noopener">github</a>
+</div>
+
+<style>
+  .contact {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 2.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .avail { display: flex; align-items: center; gap: 0.5rem; font-size: 0.76rem; color: var(--accent-2); }
+  .contact h2 { font-size: 1.7rem; color: var(--accent-bright); }
+  .contact p { color: var(--ink-dim); max-width: 26rem; line-height: 1.6; }
+
+  .cta-row { margin-top: 0.2rem; }
+
+  .footnote { font-size: 0.76rem; color: var(--ink-dim); padding-bottom: 2.2rem; }
+  .footnote a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+</style>

@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'Fraunces V';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/fraunces-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces V';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/fraunces-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces V';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/fraunces-500i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono V';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/plex-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono V';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/plex-mono-500.woff2') format('woff2');
+}
+
+:root {
+  --bg: #0c0805;
+  --surface: #18120b;
+  --surface-2: #201709;
+  --ink: #f5ebdd;
+  --ink-dim: #a9998a;
+
+  --accent: #ff7300;
+  --accent-warm: #ffae42;
+  --accent-bright: #ffc978;
+  --accent-dim: rgba(255, 115, 0, 0.6);
+  --accent-2: #63d2c9;
+
+  --gold: #d9ae5c;
+  --gold-bright: #f4dd9a;
+  --gold-dim: rgba(217, 174, 92, 0.5);
+
+  --line: rgba(224, 184, 110, 0.34);
+
+  /* Fraunces carries the voice of the page (headlines); the system stack handles
+     running text and UI chrome — deliberately not another geometric web-sans. */
+  --font-headline: 'Fraunces V', Georgia, serif;
+  --font-body: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono V', ui-monospace, monospace;
+  --font-serif: 'Fraunces V', Georgia, serif;
+
+  --radius-sm: 5px;
+  --radius-md: 7px;
+  --radius-lg: 9px;
+
+  --max-width: 1080px;
+}

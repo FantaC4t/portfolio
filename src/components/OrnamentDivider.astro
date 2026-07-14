@@ -1,0 +1,44 @@
+---
+interface Props {
+  id: string;
+  size?: 'md' | 'lg';
+}
+const { id, size = 'md' } = Astro.props;
+---
+
+<div class:list={['ornament-wrap', size]} aria-hidden="true">
+  <svg class="ornament" viewBox="0 0 320 12" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id={id} x1="0" y1="6" x2="320" y2="6" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="var(--gold)" stop-opacity="0" />
+        <stop offset="16%" stop-color="var(--gold)" />
+        <stop offset="50%" stop-color="var(--gold-bright)" />
+        <stop offset="84%" stop-color="var(--gold)" />
+        <stop offset="100%" stop-color="var(--gold)" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+
+    <line x1="0" y1="6" x2="320" y2="6" stroke={`url(#${id})`} stroke-width="1.2" />
+    <circle cx="160" cy="6" r="2.6" fill="var(--gold-bright)" />
+  </svg>
+</div>
+
+<style>
+  .ornament-wrap {
+    display: flex;
+    justify-content: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem 2.4rem;
+  }
+  .ornament {
+    width: 320px;
+    height: 12px;
+    filter: drop-shadow(0 0 5px rgba(217, 174, 92, 0.5));
+  }
+  .ornament-wrap.lg .ornament {
+    width: 420px;
+    height: 14px;
+    filter: drop-shadow(0 0 6px rgba(217, 174, 92, 0.55));
+  }
+</style>

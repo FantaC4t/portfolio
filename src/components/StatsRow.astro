@@ -1,0 +1,56 @@
+<div class="section stats-row reveal">
+  <div class="stat-panel">
+    <div class="card-head term-head mono">
+      <span class="term-dots"><i></i><i></i><i></i></span>
+      <span>~/stats/waka</span>
+      <span class="panel-total" id="waka-total"></span>
+    </div>
+    <div class="waka-bars" id="waka-bars">
+      <div class="waka-bar shimmer"><span class="waka-name"></span><span class="waka-track"></span></div>
+      <div class="waka-bar shimmer"><span class="waka-name"></span><span class="waka-track"></span></div>
+      <div class="waka-bar shimmer"><span class="waka-name"></span><span class="waka-track"></span></div>
+    </div>
+  </div>
+
+  <div class="stat-panel" id="contrib-panel">
+    <div class="card-head term-head mono">
+      <span class="term-dots"><i></i><i></i><i></i></span>
+      <span>~/stats/github</span>
+      <span class="panel-total" id="contrib-total"></span>
+    </div>
+    <div class="contrib-heatmap" id="contrib-heatmap"></div>
+  </div>
+</div>
+
+<style>
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+  @media (max-width: 640px) {
+    .stats-row { grid-template-columns: 1fr; }
+  }
+
+  .stat-panel {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0 1.15rem 1.15rem;
+    overflow: hidden;
+  }
+  .stat-panel .card-head { margin: 0 -1.15rem 0.85rem; }
+
+  .panel-total {
+    margin-left: auto;
+    color: var(--accent);
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .waka-bars { display: flex; flex-direction: column; gap: 0.55rem; }
+
+  .contrib-heatmap { overflow-x: auto; }
+  .contrib-heatmap :global(svg) { display: block; }
+</style>

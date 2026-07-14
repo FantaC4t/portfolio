@@ -1,0 +1,279 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  position: relative;
+}
+
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+::selection { background: var(--accent); color: #1a0f06; }
+
+h1, h2, h3 {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+/* stylized orange scrollbar */
+html { scrollbar-color: var(--accent) var(--surface); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--accent), var(--accent-warm));
+  border-radius: 99px;
+  border: 2px solid var(--surface);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent-bright); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.mono { font-family: var(--font-mono); }
+
+/* small rhombus accent, reused for separators / eyebrows / card marks */
+.dia {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  flex: none;
+  background: var(--accent-bright);
+  transform: rotate(45deg);
+  box-shadow: 0 0 7px rgba(255, 115, 0, 0.75);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+  flex: none;
+  animation: tickPulse 2.2s ease-in-out infinite;
+}
+@keyframes tickPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.sec-num {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* full-bleed texture overlays, mounted once in Layout */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  z-index: 50;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 49;
+  background: radial-gradient(ellipse at 50% 30%, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* shared section chrome, used by Projects / Skills / Contact */
+.section { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 3.2rem; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.section-title { font-size: 1.3rem; font-weight: 700; display: flex; align-items: baseline; gap: 0.65rem; }
+
+/* terminal-window card header (dots + path + diamond mark), used by ProjectCard and SkillsSection */
+.term-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.62rem 1.9rem 0.62rem 1.15rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+}
+.term-head::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 1.15rem;
+  width: 6px;
+  height: 6px;
+  transform: translateY(-50%) rotate(45deg);
+  background: var(--accent-bright);
+  box-shadow: 0 0 7px rgba(255, 115, 0, 0.8);
+}
+.term-dots { display: flex; gap: 0.32rem; }
+.term-dots i { width: 7px; height: 7px; border-radius: 50%; background: #3a2f24; display: block; }
+
+/* shared buttons, used by Hero / Contact */
+.cta-row { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+.btn {
+  font-size: 0.83rem;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  transition: transform 0.16s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.16s, border-color 0.16s, background 0.16s;
+  position: relative;
+  overflow: hidden;
+}
+.btn:active { transform: scale(0.96); transition-duration: 0.08s; }
+
+.btn-arrow { display: inline-block; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.btn:hover .btn-arrow, .btn:focus-visible .btn-arrow { transform: translateX(3px); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #2b1200;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -2px 0 rgba(0, 0, 0, 0.12), 0 4px 16px -6px rgba(255, 115, 0, 0.55);
+}
+.btn-primary:hover {
+  background: var(--accent-warm);
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -2px 0 rgba(0, 0, 0, 0.1), 0 10px 26px -8px rgba(255, 115, 0, 0.75);
+}
+.btn-primary:active { box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.25); }
+
+.btn-ghost {
+  background: color-mix(in srgb, var(--gold) 6%, transparent);
+  border: 1px solid var(--gold-dim);
+  color: var(--ink);
+}
+.btn-ghost:hover {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  border-color: var(--gold-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -12px rgba(217, 174, 92, 0.5);
+}
+
+/* WakaTime bars in StatsRow — rendered/replaced client-side by src/scripts/stats.ts,
+   so this must be global rather than an Astro-scoped component style. */
+.waka-bar { display: grid; grid-template-columns: 5rem 1fr 3.6rem; align-items: center; gap: 0.6rem; }
+.waka-name { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.waka-track { position: relative; display: block; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.waka-fill {
+  position: absolute; inset: 0; width: 0%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--lang-color, var(--accent-warm)));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.waka-time { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-dim); text-align: right; }
+
+.shimmer .waka-name, .shimmer .waka-track {
+  background: linear-gradient(90deg, var(--surface-2) 25%, rgba(255, 255, 255, 0.06) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmerMove 1.6s ease-in-out infinite;
+  border-radius: 4px;
+}
+@keyframes shimmerMove {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* scroll-reveal: toggled by src/scripts/reveal.ts */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* mobile scroll progress indicator: src/scripts/scroll-progress.ts */
+.scroll-indicator {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--accent), var(--accent-warm), var(--gold-bright));
+  z-index: 99999;
+  pointer-events: none;
+  transition: width 0.08s linear;
+}
+
+/* Konami code easter egg: src/scripts/konami.ts */
+@keyframes konamiShake {
+  0%   { transform: rotate(0deg) scale(1); }
+  12%  { transform: rotate(-2.5deg) scale(1.035); }
+  25%  { transform: rotate(2.5deg) scale(1.04); }
+  38%  { transform: rotate(-1.5deg) scale(1.025); }
+  50%  { transform: rotate(1.5deg) scale(1.03); }
+  70%  { transform: rotate(-0.5deg) scale(1.01); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+@keyframes konamiBorderRainbow {
+  0%   { border-color: rgba(255, 100, 100, 0.75); box-shadow: 0 0 22px rgba(255, 100, 100, 0.35); }
+  17%  { border-color: rgba(255, 185, 55, 0.75);  box-shadow: 0 0 22px rgba(255, 185, 55, 0.35); }
+  33%  { border-color: rgba(255, 240, 55, 0.75);  box-shadow: 0 0 22px rgba(255, 240, 55, 0.35); }
+  50%  { border-color: rgba(55, 220, 110, 0.75);  box-shadow: 0 0 22px rgba(55, 220, 110, 0.35); }
+  67%  { border-color: rgba(60, 155, 255, 0.75);  box-shadow: 0 0 22px rgba(60, 155, 255, 0.35); }
+  83%  { border-color: rgba(155, 60, 255, 0.75);  box-shadow: 0 0 22px rgba(155, 60, 255, 0.35); }
+  100% { border-color: rgba(255, 100, 100, 0.75); box-shadow: 0 0 22px rgba(255, 100, 100, 0.35); }
+}
+.konami-shake { animation: konamiShake 0.6s ease-out both !important; }
+.konami-rainbow { animation: konamiBorderRainbow 1.4s linear infinite !important; }
+
+.konami-toast {
+  position: fixed;
+  top: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-160%);
+  background: linear-gradient(135deg, rgba(255, 90, 90, 0.96) 0%, rgba(255, 190, 55, 0.96) 50%, rgba(255, 90, 200, 0.96) 100%);
+  color: #1a0800;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.58rem 1.4rem;
+  border-radius: 100px;
+  z-index: 99999;
+  transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.konami-toast.show { transform: translateX(-50%) translateY(0); }
+
+.gradius-hint {
+  font-size: 0.62rem;
+  color: rgba(255, 200, 150, 0.18);
+  letter-spacing: 0.06em;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+.gradius-hint:hover { color: rgba(255, 200, 150, 0.55); }
+
+/* Discord presence in the ticker: src/scripts/lanyard.ts */
+.discord-status { display: inline-flex; align-items: center; gap: 0.4rem; }
+.discord-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6b7280;
+  box-shadow: 0 0 6px rgba(107, 114, 128, 0.4);
+  flex: none;
+}

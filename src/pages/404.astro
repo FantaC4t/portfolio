@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — fantacat" description="Page not found.">
+  <main class="not-found">
+    <div class="panel">
+      <div class="card-head term-head mono"><span class="term-dots"><i></i><i></i><i></i></span><span>~/404</span></div>
+      <span class="code mono">&sect; 404</span>
+      <h1>nothing here</h1>
+      <p>That page doesn't exist, or moved. Let's get you back.</p>
+      <a class="btn btn-primary" href="/">back home <span class="btn-arrow" aria-hidden="true">&#8594;</span></a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .not-found {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .panel {
+    position: relative;
+    width: 100%;
+    max-width: 26rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0 1.5rem 2rem;
+    overflow: hidden;
+    text-align: center;
+  }
+  .panel .card-head { margin: 0 -1.5rem 1.6rem; justify-content: flex-start; }
+  .code { display: block; font-size: 0.82rem; color: var(--accent); margin-bottom: 0.6rem; }
+  .panel h1 { font-size: 2rem; color: var(--accent-bright); margin-bottom: 0.6rem; }
+  .panel p { color: var(--ink-dim); line-height: 1.6; margin-bottom: 1.5rem; }
+  .panel .btn { justify-content: center; width: 100%; }
+</style>
